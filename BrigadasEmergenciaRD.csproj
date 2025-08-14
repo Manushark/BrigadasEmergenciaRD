@@ -9,7 +9,6 @@
 
   <ItemGroup>
     <Folder Include="src\core\Models\" />
-    <Folder Include="src\core\Enums\" />
     <Folder Include="src\core\Interfaces\" />
     <Folder Include="src\core\Services\" />
   </ItemGroup>
