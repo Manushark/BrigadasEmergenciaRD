@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "BrigadasEmergenciaRD (App)": {
+      "commandName": "Project"
+    },
+    "BrigadasEmergenciaRD (Metrics)": {
+      "commandName": "Project",
+      "commandLineArgs": "--metrics"
+    }
+  }
+}
