@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BrigadasEmergencia.Core.Enums
+namespace BrigadasEmergenciaRD.Core.Enums
 {
     // Esta clase define los tipos de emergencias que puede haber en el sistema
     public enum TipoEmergencia

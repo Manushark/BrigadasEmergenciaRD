@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BrigadasEmergencia.Core.Enums
+namespace BrigadasEmergenciaRD.Core.Enums
 {
     // Enum que define la intensidad de la tormenta para medir su gravedad
     public enum IntensidadTormenta

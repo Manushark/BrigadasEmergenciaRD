@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BrigadasEmergencia.Core.Enums
+namespace BrigadasEmergenciaRD.Core.Enums
 {
     // Enum que define el estado de una brigada
     public enum EstadoBrigada
