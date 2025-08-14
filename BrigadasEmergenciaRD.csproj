@@ -8,8 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="src\core\Interfaces\" />
-    <Folder Include="src\core\Services\" />
+    <Folder Include="src\Core\Interfaces\" />
+    <Folder Include="src\Core\Services\" />
   </ItemGroup>
 
 </Project>
