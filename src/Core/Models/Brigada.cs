@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BrigadasEmergenciaRD.Core.Enums;
+using BrigadasEmergenciaRD.Core.Interfaces;
 
 namespace BrigadasEmergenciaRD.Core.Models
 {
