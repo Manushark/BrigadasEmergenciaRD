@@ -1,0 +1,740 @@
+{
+  "barrios": [
+    {
+      "id": "010101",
+      "nombre": "Zona Colonial",
+      "provincia_codigo": "01",
+      "provincia_nombre": "Distrito Nacional",
+      "municipio_codigo": "01",
+      "municipio_nombre": "Santo Domingo de Guzmán",
+      "subbarrios": [
+        { "id": "01010101", "nombre": "Ciudad Nueva" },
+        { "id": "01010102", "nombre": "San Carlos" }
+      ]
+    },
+    {
+      "id": "010102",
+      "nombre": "Gazcue",
+      "provincia_codigo": "01",
+      "provincia_nombre": "Distrito Nacional",
+      "municipio_codigo": "01",
+      "municipio_nombre": "Santo Domingo de Guzmán",
+      "subbarrios": [
+        { "id": "01010201", "nombre": "Don Bosco" },
+        { "id": "01010202", "nombre": "San Juan Bosco" }
+      ]
+    },
+    {
+      "id": "010103",
+      "nombre": "Piantini",
+      "provincia_codigo": "01",
+      "provincia_nombre": "Distrito Nacional",
+      "municipio_codigo": "01",
+      "municipio_nombre": "Santo Domingo de Guzmán",
+      "subbarrios": [
+        { "id": "01010301", "nombre": "Ensanche Paraíso" }
+      ]
+    },
+    {
+      "id": "010104",
+      "nombre": "Ensanche Naco",
+      "provincia_codigo": "01",
+      "provincia_nombre": "Distrito Nacional",
+      "municipio_codigo": "01",
+      "municipio_nombre": "Santo Domingo de Guzmán",
+      "subbarrios": []
+    },
+    {
+      "id": "010105",
+      "nombre": "Bella Vista",
+      "provincia_codigo": "01",
+      "provincia_nombre": "Distrito Nacional",
+      "municipio_codigo": "01",
+      "municipio_nombre": "Santo Domingo de Guzmán",
+      "subbarrios": [
+        { "id": "01010501", "nombre": "Mirador Sur" }
+      ]
+    },
+    {
+      "id": "020101",
+      "nombre": "Barrio La Bombita",
+      "provincia_codigo": "02",
+      "provincia_nombre": "Azua",
+      "municipio_codigo": "01",
+      "municipio_nombre": "Azua de Compostela",
+      "subbarrios": []
+    },
+    {
+      "id": "020102",
+      "nombre": "Barrio Los Mangos",
+      "provincia_codigo": "02",
+      "provincia_nombre": "Azua",
+      "municipio_codigo": "01",
+      "municipio_nombre": "Azua de Compostela",
+      "subbarrios": []
+    },
+    {
+      "id": "030101",
+      "nombre": "Barrio San Bartolomé",
+      "provincia_codigo": "03",
+      "provincia_nombre": "Baoruco",
+      "municipio_codigo": "01",
+      "municipio_nombre": "Neiba",
+      "subbarrios": []
+    },
+    {
+      "id": "030102",
+      "nombre": "Barrio El Centro",
+      "provincia_codigo": "03",
+      "provincia_nombre": "Baoruco",
+      "municipio_codigo": "01",
+      "municipio_nombre": "Neiba",
+      "subbarrios": []
+    },
+    {
+      "id": "040301",
+      "nombre": "Barrio Los Maestros",
+      "provincia_codigo": "04",
+      "provincia_nombre": "Barahona",
+      "municipio_codigo": "03",
+      "municipio_nombre": "Enriquillo",
+      "subbarrios": []
+    },
+    {
+      "id": "040302",
+      "nombre": "Barrio La Playa",
+      "provincia_codigo": "04",
+      "provincia_nombre": "Barahona",
+      "municipio_codigo": "03",
+      "municipio_nombre": "Enriquillo",
+      "subbarrios": []
+    },
+    {
+      "id": "050101",
+      "nombre": "Barrio Norte",
+      "provincia_codigo": "05",
+      "provincia_nombre": "Dajabón",
+      "municipio_codigo": "01",
+      "municipio_nombre": "Dajabón",
+      "subbarrios": []
+    },
+    {
+      "id": "050102",
+      "nombre": "Barrio Sur",
+      "provincia_codigo": "05",
+      "provincia_nombre": "Dajabón",
+      "municipio_codigo": "01",
+      "municipio_nombre": "Dajabón",
+      "subbarrios": []
+    },
+    {
+      "id": "050201",
+      "nombre": "Barrio Los Pinos",
+      "provincia_codigo": "05",
+      "provincia_nombre": "Dajabón",
+      "municipio_codigo": "02",
+      "municipio_nombre": "El Pino",
+      "subbarrios": []
+    },
+    {
+      "id": "050301",
+      "nombre": "Barrio Central",
+      "provincia_codigo": "05",
+      "provincia_nombre": "Dajabón",
+      "municipio_codigo": "03",
+      "municipio_nombre": "Partido",
+      "subbarrios": []
+    },
+    {
+      "id": "050401",
+      "nombre": "Barrio La Fe",
+      "provincia_codigo": "05",
+      "provincia_nombre": "Dajabón",
+      "municipio_codigo": "04",
+      "municipio_nombre": "Loma de Cabrera",
+      "subbarrios": []
+    },
+    {
+      "id": "050501",
+      "nombre": "Barrio El Progreso",
+      "provincia_codigo": "05",
+      "provincia_nombre": "Dajabón",
+      "municipio_codigo": "05",
+      "municipio_nombre": "Restauración",
+      "subbarrios": []
+    },
+    {
+      "id": "060101",
+      "nombre": "Barrio San Vicente",
+      "provincia_codigo": "06",
+      "provincia_nombre": "Duarte",
+      "municipio_codigo": "01",
+      "municipio_nombre": "San Francisco de Macorís",
+      "subbarrios": [
+        { "id": "06010101", "nombre": "San Vicente Centro" }
+      ]
+    },
+    {
+      "id": "060102",
+      "nombre": "Barrio El Capacito",
+      "provincia_codigo": "06",
+      "provincia_nombre": "Duarte",
+      "municipio_codigo": "01",
+      "municipio_nombre": "San Francisco de Macorís",
+      "subbarrios": []
+    },
+    {
+      "id": "060201",
+      "nombre": "Barrio El Centro",
+      "provincia_codigo": "06",
+      "provincia_nombre": "Duarte",
+      "municipio_codigo": "02",
+      "municipio_nombre": "Castillo",
+      "subbarrios": []
+    },
+    {
+      "id": "060501",
+      "nombre": "Barrio La Altagracia",
+      "provincia_codigo": "06",
+      "provincia_nombre": "Duarte",
+      "municipio_codigo": "05",
+      "municipio_nombre": "Villa Riva",
+      "subbarrios": []
+    },
+    {
+      "id": "070401",
+      "nombre": "Barrio Los Jobos",
+      "provincia_codigo": "07",
+      "provincia_nombre": "Elías Piña",
+      "municipio_codigo": "04",
+      "municipio_nombre": "Hondo Valle",
+      "subbarrios": []
+    },
+    {
+      "id": "070501",
+      "nombre": "Barrio El Llano",
+      "provincia_codigo": "07",
+      "provincia_nombre": "Elías Piña",
+      "municipio_codigo": "05",
+      "municipio_nombre": "Pedro Santana",
+      "subbarrios": []
+    },
+    {
+      "id": "070601",
+      "nombre": "Barrio La Palma",
+      "provincia_codigo": "07",
+      "provincia_nombre": "Elías Piña",
+      "municipio_codigo": "06",
+      "municipio_nombre": "Juan Santiago",
+      "subbarrios": []
+    },
+    {
+      "id": "080101",
+      "nombre": "Barrio Ginandiana",
+      "provincia_codigo": "08",
+      "provincia_nombre": "El Seibo",
+      "municipio_codigo": "01",
+      "municipio_nombre": "El Seibo",
+      "subbarrios": []
+    },
+    {
+      "id": "080102",
+      "nombre": "Barrio Los Hoyitos",
+      "provincia_codigo": "08",
+      "provincia_nombre": "El Seibo",
+      "municipio_codigo": "01",
+      "municipio_nombre": "El Seibo",
+      "subbarrios": []
+    },
+    {
+      "id": "090101",
+      "nombre": "Barrio Las Baitoas",
+      "provincia_codigo": "09",
+      "provincia_nombre": "Independencia",
+      "municipio_codigo": "01",
+      "municipio_nombre": "Duvergé",
+      "subbarrios": []
+    },
+    {
+      "id": "090801",
+      "nombre": "Barrio El Centro",
+      "provincia_codigo": "09",
+      "provincia_nombre": "Independencia",
+      "municipio_codigo": "08",
+      "municipio_nombre": "La Descubierta",
+      "subbarrios": []
+    },
+    {
+      "id": "100601",
+      "nombre": "Barrio Los Cocos",
+      "provincia_codigo": "10",
+      "provincia_nombre": "Espaillat",
+      "municipio_codigo": "06",
+      "municipio_nombre": "San Víctor",
+      "subbarrios": []
+    },
+    {
+      "id": "110101",
+      "nombre": "Barrio Savica",
+      "provincia_codigo": "11",
+      "provincia_nombre": "La Altagracia",
+      "municipio_codigo": "01",
+      "municipio_nombre": "Higüey",
+      "subbarrios": []
+    },
+    {
+      "id": "110102",
+      "nombre": "Barrio San José",
+      "provincia_codigo": "11",
+      "provincia_nombre": "La Altagracia",
+      "municipio_codigo": "01",
+      "municipio_nombre": "Higüey",
+      "subbarrios": []
+    },
+    {
+      "id": "110201",
+      "nombre": "Barrio Boca de Yuma",
+      "provincia_codigo": "11",
+      "provincia_nombre": "La Altagracia",
+      "municipio_codigo": "02",
+      "municipio_nombre": "San Rafael del Yuma",
+      "subbarrios": []
+    },
+    {
+      "id": "120101",
+      "nombre": "Barrio Villa Verde",
+      "provincia_codigo": "12",
+      "provincia_nombre": "La Romana",
+      "municipio_codigo": "01",
+      "municipio_nombre": "La Romana",
+      "subbarrios": []
+    },
+    {
+      "id": "120102",
+      "nombre": "Barrio San Carlos",
+      "provincia_codigo": "12",
+      "provincia_nombre": "La Romana",
+      "municipio_codigo": "01",
+      "municipio_nombre": "La Romana",
+      "subbarrios": []
+    },
+    {
+      "id": "130101",
+      "nombre": "Barrio San Miguel",
+      "provincia_codigo": "13",
+      "provincia_nombre": "La Vega",
+      "municipio_codigo": "01",
+      "municipio_nombre": "La Vega",
+      "subbarrios": []
+    },
+    {
+      "id": "130102",
+      "nombre": "Barrio El Centro",
+      "provincia_codigo": "13",
+      "provincia_nombre": "La Vega",
+      "municipio_codigo": "01",
+      "municipio_nombre": "La Vega",
+      "subbarrios": []
+    },
+    {
+      "id": "130301",
+      "nombre": "Barrio Buenos Aires",
+      "provincia_codigo": "13",
+      "provincia_nombre": "La Vega",
+      "municipio_codigo": "03",
+      "municipio_nombre": "Jarabacoa",
+      "subbarrios": []
+    },
+    {
+      "id": "140101",
+      "nombre": "Barrio Las Flores",
+      "provincia_codigo": "14",
+      "provincia_nombre": "María Trinidad Sánchez",
+      "municipio_codigo": "01",
+      "municipio_nombre": "Nagua",
+      "subbarrios": []
+    },
+    {
+      "id": "140201",
+      "nombre": "Barrio La Playa",
+      "provincia_codigo": "14",
+      "provincia_nombre": "María Trinidad Sánchez",
+      "municipio_codigo": "02",
+      "municipio_nombre": "Cabrera",
+      "subbarrios": []
+    },
+    {
+      "id": "140401",
+      "nombre": "Barrio Los Pescadores",
+      "provincia_codigo": "14",
+      "provincia_nombre": "María Trinidad Sánchez",
+      "municipio_codigo": "04",
+      "municipio_nombre": "Río San Juan",
+      "subbarrios": []
+    },
+    {
+      "id": "150101",
+      "nombre": "Barrio Los Cacaos",
+      "provincia_codigo": "15",
+      "provincia_nombre": "Samaná",
+      "municipio_codigo": "01",
+      "municipio_nombre": "Santa Bárbara de Samaná",
+      "subbarrios": []
+    },
+    {
+      "id": "160101",
+      "nombre": "Barrio El Pinar",
+      "provincia_codigo": "16",
+      "provincia_nombre": "San José de Ocoa",
+      "municipio_codigo": "01",
+      "municipio_nombre": "San José de Ocoa",
+      "subbarrios": []
+    },
+    {
+      "id": "170101",
+      "nombre": "Barrio San Pedro",
+      "provincia_codigo": "17",
+      "provincia_nombre": "Montecristi",
+      "municipio_codigo": "01",
+      "municipio_nombre": "San Fernando de Monte Cristi",
+      "subbarrios": []
+    },
+    {
+      "id": "180701",
+      "nombre": "Barrio Los Mangos",
+      "provincia_codigo": "18",
+      "provincia_nombre": "Monte Plata",
+      "municipio_codigo": "07",
+      "municipio_nombre": "Yamasá",
+      "subbarrios": []
+    },
+    {
+      "id": "190101",
+      "nombre": "Barrio Los Mameyes",
+      "provincia_codigo": "19",
+      "provincia_nombre": "Puerto Plata",
+      "municipio_codigo": "01",
+      "municipio_nombre": "Puerto Plata",
+      "subbarrios": []
+    },
+    {
+      "id": "190102",
+      "nombre": "Barrio Playa Oeste",
+      "provincia_codigo": "19",
+      "provincia_nombre": "Puerto Plata",
+      "municipio_codigo": "01",
+      "municipio_nombre": "Puerto Plata",
+      "subbarrios": []
+    },
+    {
+      "id": "200101",
+      "nombre": "Barrio Meseta",
+      "provincia_codigo": "20",
+      "provincia_nombre": "San Juan",
+      "municipio_codigo": "01",
+      "municipio_nombre": "San Juan de la Maguana",
+      "subbarrios": []
+    },
+    {
+      "id": "200201",
+      "nombre": "Barrio El Centro",
+      "provincia_codigo": "20",
+      "provincia_nombre": "San Juan",
+      "municipio_codigo": "02",
+      "municipio_nombre": "Las Matas de Farfán",
+      "subbarrios": []
+    },
+    {
+      "id": "210101",
+      "nombre": "Barrio Santa Rosa",
+      "provincia_codigo": "21",
+      "provincia_nombre": "Peravia",
+      "municipio_codigo": "01",
+      "municipio_nombre": "Baní",
+      "subbarrios": []
+    },
+    {
+      "id": "210301",
+      "nombre": "Barrio Las Mercedes",
+      "provincia_codigo": "21",
+      "provincia_nombre": "Peravia",
+      "municipio_codigo": "03",
+      "municipio_nombre": "Nizao",
+      "subbarrios": []
+    },
+    {
+      "id": "210801",
+      "nombre": "Barrio El Centro",
+      "provincia_codigo": "21",
+      "provincia_nombre": "Peravia",
+      "municipio_codigo": "08",
+      "municipio_nombre": "Sabana Grande de Palenque",
+      "subbarrios": []
+    },
+    {
+      "id": "220101",
+      "nombre": "Barrio Alcoa",
+      "provincia_codigo": "22",
+      "provincia_nombre": "Pedernales",
+      "municipio_codigo": "01",
+      "municipio_nombre": "Pedernales",
+      "subbarrios": []
+    },
+    {
+      "id": "220501",
+      "nombre": "Barrio Las Lagunas",
+      "provincia_codigo": "22",
+      "provincia_nombre": "Pedernales",
+      "municipio_codigo": "05",
+      "municipio_nombre": "Oviedo",
+      "subbarrios": []
+    },
+    {
+      "id": "230201",
+      "nombre": "Barrio Los Maestros",
+      "provincia_codigo": "23",
+      "provincia_nombre": "San Pedro de Macorís",
+      "municipio_codigo": "02",
+      "municipio_nombre": "Los Llanos",
+      "subbarrios": []
+    },
+    {
+      "id": "240101",
+      "nombre": "Barrio La Esperanza",
+      "provincia_codigo": "24",
+      "provincia_nombre": "Sánchez Ramírez",
+      "municipio_codigo": "01",
+      "municipio_nombre": "Cotuí",
+      "subbarrios": []
+    },
+    {
+      "id": "240501",
+      "nombre": "Barrio Los Cocos",
+      "provincia_codigo": "24",
+      "provincia_nombre": "Sánchez Ramírez",
+      "municipio_codigo": "05",
+      "municipio_nombre": "Villa la Mata",
+      "subbarrios": []
+    },
+    {
+      "id": "250101",
+      "nombre": "Cerro Alto",
+      "provincia_codigo": "25",
+      "provincia_nombre": "Santiago",
+      "municipio_codigo": "01",
+      "municipio_nombre": "Santiago de los Caballeros",
+      "subbarrios": [
+        { "id": "25010101", "nombre": "Cerro Alto Centro" }
+      ]
+    },
+    {
+      "id": "250102",
+      "nombre": "Los Jardines Metropolitanos",
+      "provincia_codigo": "25",
+      "provincia_nombre": "Santiago",
+      "municipio_codigo": "01",
+      "municipio_nombre": "Santiago de los Caballeros",
+      "subbarrios": []
+    },
+    {
+      "id": "250103",
+      "nombre": "Cienfuegos",
+      "provincia_codigo": "25",
+      "provincia_nombre": "Santiago",
+      "municipio_codigo": "01",
+      "municipio_nombre": "Santiago de los Caballeros",
+      "subbarrios": []
+    },
+    {
+      "id": "250201",
+      "nombre": "Barrio Los Reyes",
+      "provincia_codigo": "25",
+      "provincia_nombre": "Santiago",
+      "municipio_codigo": "02",
+      "municipio_nombre": "Bisonó",
+      "subbarrios": []
+    },
+    {
+      "id": "250301",
+      "nombre": "Barrio El Centro",
+      "provincia_codigo": "25",
+      "provincia_nombre": "Santiago",
+      "municipio_codigo": "03",
+      "municipio_nombre": "Jánico",
+      "subbarrios": []
+    },
+    {
+      "id": "250401",
+      "nombre": "Barrio Canca La Piedra",
+      "provincia_codigo": "25",
+      "provincia_nombre": "Santiago",
+      "municipio_codigo": "04",
+      "municipio_nombre": "Tamboril",
+      "subbarrios": []
+    },
+    {
+      "id": "250501",
+      "nombre": "Barrio Los Sánchez",
+      "provincia_codigo": "25",
+      "provincia_nombre": "Santiago",
+      "municipio_codigo": "05",
+      "municipio_nombre": "Licey al Medio",
+      "subbarrios": []
+    },
+    {
+      "id": "250601",
+      "nombre": "Barrio Canabacoa",
+      "provincia_codigo": "25",
+      "provincia_nombre": "Santiago",
+      "municipio_codigo": "06",
+      "municipio_nombre": "Puñal",
+      "subbarrios": []
+    },
+    {
+      "id": "250701",
+      "nombre": "Barrio La Zanja",
+      "provincia_codigo": "25",
+      "provincia_nombre": "Santiago",
+      "municipio_codigo": "07",
+      "municipio_nombre": "Sabana Iglesia",
+      "subbarrios": []
+    },
+    {
+      "id": "260101",
+      "nombre": "Barrio Los Multis",
+      "provincia_codigo": "26",
+      "provincia_nombre": "Santiago Rodríguez",
+      "municipio_codigo": "01",
+      "municipio_nombre": "San Ignacio de Sabaneta",
+      "subbarrios": []
+    },
+    {
+      "id": "270101",
+      "nombre": "Barrio Gualey",
+      "provincia_codigo": "27",
+      "provincia_nombre": "Hato Mayor",
+      "municipio_codigo": "01",
+      "municipio_nombre": "Hato Mayor del Rey",
+      "subbarrios": []
+    },
+    {
+      "id": "280101",
+      "nombre": "Barrio Los Amigos",
+      "provincia_codigo": "28",
+      "provincia_nombre": "Monseñor Nouel",
+      "municipio_codigo": "01",
+      "municipio_nombre": "Bonao",
+      "subbarrios": []
+    },
+    {
+      "id": "290101",
+      "nombre": "Madre Vieja Norte",
+      "provincia_codigo": "29",
+      "provincia_nombre": "San Cristóbal",
+      "municipio_codigo": "01",
+      "municipio_nombre": "San Cristóbal",
+      "subbarrios": []
+    },
+    {
+      "id": "290102",
+      "nombre": "5 de Abril",
+      "provincia_codigo": "29",
+      "provincia_nombre": "San Cristóbal",
+      "municipio_codigo": "01",
+      "municipio_nombre": "San Cristóbal",
+      "subbarrios": []
+    },
+    {
+      "id": "300101",
+      "nombre": "Los Mameyes",
+      "provincia_codigo": "30",
+      "provincia_nombre": "Santo Domingo",
+      "municipio_codigo": "01",
+      "municipio_nombre": "Santo Domingo Este",
+      "subbarrios": [
+        { "id": "30010101", "nombre": "Los Mina" }
+      ]
+    },
+    {
+      "id": "300102",
+      "nombre": "Villa Duarte",
+      "provincia_codigo": "30",
+      "provincia_nombre": "Santo Domingo",
+      "municipio_codigo": "01",
+      "municipio_nombre": "Santo Domingo Este",
+      "subbarrios": []
+    },
+    {
+      "id": "300201",
+      "nombre": "Herrera",
+      "provincia_codigo": "30",
+      "provincia_nombre": "Santo Domingo",
+      "municipio_codigo": "02",
+      "municipio_nombre": "Santo Domingo Oeste",
+      "subbarrios": []
+    },
+    {
+      "id": "300202",
+      "nombre": "Manoguayabo",
+      "provincia_codigo": "30",
+      "provincia_nombre": "Santo Domingo",
+      "municipio_codigo": "02",
+      "municipio_nombre": "Santo Domingo Oeste",
+      "subbarrios": []
+    },
+    {
+      "id": "300301",
+      "nombre": "Villa Mella",
+      "provincia_codigo": "30",
+      "provincia_nombre": "Santo Domingo",
+      "municipio_codigo": "03",
+      "municipio_nombre": "Santo Domingo Norte",
+      "subbarrios": []
+    },
+    {
+      "id": "300302",
+      "nombre": "Sabana Perdida",
+      "provincia_codigo": "30",
+      "provincia_nombre": "Santo Domingo",
+      "municipio_codigo": "03",
+      "municipio_nombre": "Santo Domingo Norte",
+      "subbarrios": []
+    },
+    {
+      "id": "310101",
+      "nombre": "Barrio Hatico",
+      "provincia_codigo": "31",
+      "provincia_nombre": "Valverde",
+      "municipio_codigo": "01",
+      "municipio_nombre": "Santa Cruz de Mao",
+      "subbarrios": []
+    },
+    {
+      "id": "310201",
+      "nombre": "Barrio La Altagracia",
+      "provincia_codigo": "31",
+      "provincia_nombre": "Valverde",
+      "municipio_codigo": "02",
+      "municipio_nombre": "Esperanza",
+      "subbarrios": []
+    },
+    {
+      "id": "310401",
+      "nombre": "Barrio Los Cayucos",
+      "provincia_codigo": "31",
+      "provincia_nombre": "Valverde",
+      "municipio_codigo": "04",
+      "municipio_nombre": "Laguna Salada",
+      "subbarrios": []
+    },
+    {
+      "id": "320101",
+      "nombre": "Barrio Los Mangos",
+      "provincia_codigo": "32",
+      "provincia_nombre": "Hermanas Mirabal",
+      "municipio_codigo": "01",
+      "municipio_nombre": "Salcedo",
+      "subbarrios": []
+    }
+  ]
+}
