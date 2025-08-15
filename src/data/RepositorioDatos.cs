@@ -3,98 +3,75 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
-using BrigadasEmergenciaRD.Core.Models; 
+using BrigadasEmergenciaRD.Core.Models;
 
+// Clase para manejar la carga de datos desde archivos
 public class RepositorioDatos
 {
+    // Ruta base donde se encuentran los archivos de datos
     private readonly string _rutaDatos;
 
+    // Constructor que inicializa la ruta de datos y crea el directorio si no existe
     public RepositorioDatos(string rutaDatos = "./data/")
     {
         _rutaDatos = rutaDatos;
+        Directory.CreateDirectory(_rutaDatos);
     }
 
-    // Carga provincias desde JSON
+    // Carga provincias, municipios y barrios desde JSON
     public List<Provincia> CargarProvincias()
-    {
-        string ruta = Path.Combine(_rutaDatos, "provincias.json");
-        string json = File.ReadAllText(ruta);
-        var provincias = JsonConvert.DeserializeObject<List<Provincia>>(json) ?? new List<Provincia>();
-
-        Console.WriteLine($"Provincias cargadas: {provincias.Count}");
-        foreach (var prov in provincias.Take(5))
-            Console.WriteLine($"  - {prov.Codigo}: {prov.Nombre}");
-        if (provincias.Count > 5) Console.WriteLine("  ...");
-
-        return provincias;
-    }
-
-    // Carga municipios desde JSON y los asocia a provincias
-    public void CargarMunicipios(List<Provincia> provincias)
-    {
-        string ruta = Path.Combine(_rutaDatos, "municipios.json");
-        string json = File.ReadAllText(ruta);
-        var municipios = JsonConvert.DeserializeObject<List<Municipio>>(json) ?? new List<Municipio>();
-
-        foreach (var mun in municipios)
-        {
-            var prov = provincias.FirstOrDefault(p => p.Codigo == mun.Provincia);
-            if (prov != null) prov.Municipios.Add(mun);
-        }
-
-        Console.WriteLine($"Municipios cargados: {municipios.Count}");
-        foreach (var mun in municipios.Take(5))
-            Console.WriteLine($"  - {mun.Codigo}: {mun.Nombre} (Prov: {mun.Provincia})");
-        if (municipios.Count > 5) Console.WriteLine("  ...");
-    }
-
-    // Carga configuración desde JSON
-    public ConfiguracionSistema CargarConfiguracion()
-    {
-        string ruta = Path.Combine(_rutaDatos, "configuracion.json");
-        string json = File.ReadAllText(ruta);
-
-        var contenedor = JsonConvert.DeserializeObject<Dictionary<string, ConfiguracionSistema>>(json);
-        var config = contenedor?["configuracion"] ?? new ConfiguracionSistema();
-
-        Console.WriteLine("Configuración cargada:");
-        Console.WriteLine($"  Brigadas iniciales: {config.NumeroBrigadasInicial}");
-        Console.WriteLine($"  Tiempo simulación: {config.TiempoSimulacionSegundos}");
-        Console.WriteLine($"  Probabilidad emergencia: {config.ProbabilidadEmergenciaPorMinuto}");
-        Console.WriteLine($"  Tipos emergencias: {string.Join(", ", config.Simulacion.TiposEmergencias)}");
-
-        return config;
-    }
-
-    // Carga barrios desde JSON incluyendo subbarrios
-    public List<Barrio> CargarBarriosDesdeJson(string archivoJson = "barrios.json")
     {
         try
         {
-            string ruta = Path.Combine(_rutaDatos, archivoJson);
+            // Construye la ruta al archivo barrios.json
+            string ruta = Path.Combine(_rutaDatos, "barrios.json");
+            // Lee el contenido del archivo
             string json = File.ReadAllText(ruta);
-
-            var contenedor = JsonConvert.DeserializeObject<Dictionary<string, List<Barrio>>>(json);
-            var barrios = contenedor?["barrios"] ?? new List<Barrio>();
-
-            Console.WriteLine($"Barrios cargados: {barrios.Count}");
-            foreach (var barrio in barrios.Take(5))
+            // Deserializa el JSON directamente a una lista de provincias
+            var provincias = JsonConvert.DeserializeObject<List<Provincia>>(json) ?? new List<Provincia>();
+            // Asegura que todas las listas estén inicializadas para evitar null references
+            foreach (var prov in provincias)
             {
-                Console.WriteLine($"  - {barrio.Nombre} ({barrio.MunicipioNombre}) | Subbarrios: {barrio.SubBarrios.Count}");
+                prov.Municipios = prov.Municipios ?? new List<Municipio>();
+                foreach (var mun in prov.Municipios)
+                {
+                    mun.Barrios = mun.Barrios ?? new List<Barrio>();
+                }
             }
-            if (barrios.Count > 5) Console.WriteLine("  ...");
-
-            return barrios;
+            // Muestra información de las provincias cargadas
+            Console.WriteLine($"Provincias cargadas: {provincias.Count}");
+            foreach (var prov in provincias.Take(5))
+            {
+                Console.WriteLine($"  - {prov.Id}: {prov.Nombre} (Municipios: {prov.Municipios.Count})");
+                foreach (var mun in prov.Municipios.Take(2))
+                {
+                    Console.WriteLine($"    - {mun.Id}: {mun.Nombre} (Barrios: {mun.Barrios.Count})");
+                    foreach (var barrio in mun.Barrios.Take(2))
+                    {
+                        Console.WriteLine($"      - {barrio.Id}: {barrio.Nombre}");
+                    }
+                }
+            }
+            if (provincias.Count > 5) Console.WriteLine("  ...");
+            return provincias;
         }
         catch (FileNotFoundException)
         {
+            // Maneja el caso en que el archivo no se encuentra
             Console.WriteLine("Archivo JSON de barrios no encontrado.");
-            return new List<Barrio>();
+            return new List<Provincia>();
         }
         catch (JsonException ex)
         {
+            // Maneja errores de deserialización JSON
             Console.WriteLine($"Error leyendo JSON de barrios: {ex.Message}");
-            return new List<Barrio>();
+            return new List<Provincia>();
+        }
+        catch (Exception ex)
+        {
+            // Maneja cualquier otro error inesperado
+            Console.WriteLine($"Error al cargar provincias: {ex.Message}");
+            return new List<Provincia>();
         }
     }
 }

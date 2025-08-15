@@ -15,7 +15,6 @@ namespace BrigadasEmergenciaRD.Core.Models
         public string Codigo { get; set; }
         public string Region { get; set; }
         public int Poblacion { get; set; }
-        public double AreaKm2 { get; set; }
         public Coordenada Coordenadas { get; set; }
         public string VulnerabilidadClimatica { get; set; }
 

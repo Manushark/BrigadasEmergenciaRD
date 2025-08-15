@@ -55,8 +55,6 @@ namespace BrigadasEmergenciaRD.Core.Services
             if (provincia.Poblacion < 0)
                 errores.Add("Poblacion no puede ser negativa");
 
-            if (provincia.AreaKm2 <= 0)
-                errores.Add("Area debe ser mayor que 0");
 
             if (provincia.Coordenadas == null)
                 errores.Add("Coordenadas son requeridas");

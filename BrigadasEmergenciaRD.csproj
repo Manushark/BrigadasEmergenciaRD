@@ -8,16 +8,17 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="CsvHelper" Version="33.1.0" />
+		<!-- Paquete necesario para JSON -->
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-		<ProjectReference Include="..\BrigadasEmergenciaRD.Core\BrigadasEmergenciaRD.Core.csproj" />
-		<ProjectReference Include="..\BrigadasEmergenciaRD.Infrastructure\BrigadasEmergenciaRD.Infrastructure.csproj" />
 
 		<!-- Archivos JSON copiados al directorio de salida -->
 		<None Update="src\data\provincias.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="src\data\municipios.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="src\data\barrios.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="src\data\configuracion.json">
