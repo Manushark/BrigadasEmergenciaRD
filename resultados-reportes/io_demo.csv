@@ -1,0 +1,2 @@
+﻿Nombre,Iteraciones,Exitos,Fallos,DuracionSeg,ThroughputOpsSeg,LatenciaMediaMs,P95Ms,P99Ms,Bytes,MemoriaMb,GradoParalelismo
+IO_Demo,200,200,0,0.2271362,880.5289513516559,9.6268825,16.3112,16.3646,0,46.46875,16
