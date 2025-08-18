@@ -6,6 +6,7 @@ using BrigadasEmergenciaRD.Simulation;
 using BrigadasEmergenciaRD.Data;
 using BrigadasEmergenciaRD.Core.Enums;
 using BrigadasEmergenciaRD.src.Simulation.UI;
+using BrigadasEmergenciaRD.Tests;
 using System.IO;
 
 class Program
@@ -235,6 +236,21 @@ Generado: {DateTime.Now:yyyy-MM-dd HH:mm}
                     default: Console.WriteLine("Opcion invalida"); break;
                 }
             }
+
         }
+        
+        // ===============================
+        //     Pruebas de paralelismo
+        // ===============================
+        Console.WriteLine("\n\n==================================");
+        Console.WriteLine("🚀 INICIANDO PRUEBAS DE PARALELISMO");
+        Console.WriteLine("==================================\n");
+
+        await PruebasParalelismo.EjecutarPruebasAsync();
+        await PruebasParalelismo.GenerarReporteEntregaAsync();
+
+        Console.WriteLine("\n==================================");
+        Console.WriteLine("✅ TODAS LAS PRUEBAS COMPLETADAS");
+        Console.WriteLine("==================================");
     }
 }
