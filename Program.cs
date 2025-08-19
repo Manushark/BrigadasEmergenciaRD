@@ -1,15 +1,15 @@
-﻿using System;
+﻿using BrigadasEmergenciaRD.Core.Enums;
+using BrigadasEmergenciaRD.Core.Models;
+using BrigadasEmergenciaRD.Data;
+using BrigadasEmergenciaRD.Metrics.Reporters;
+using BrigadasEmergenciaRD.Parallelism;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using BrigadasEmergenciaRD.Core.Enums;
-using BrigadasEmergenciaRD.Core.Interfaces;
-using BrigadasEmergenciaRD.Core.Models;
-using BrigadasEmergenciaRD.Data;
-using BrigadasEmergenciaRD.Parallelism;
 
 class Program
 {
@@ -18,7 +18,7 @@ class Program
     private static Random _random = new();
     private static readonly object _lockConsole = new object();
 
-    // Estadísticas en tiempo real
+    // Estadisticas en tiempo real
     private static int _emergenciasGeneradas = 0;
     private static int _emergenciasAtendidas = 0;
     private static int _brigadasEnServicio = 0;
@@ -36,7 +36,8 @@ class Program
         }
         catch (Exception ex)
         {
-            MostrarError($"Error crítico: {ex.Message}");
+            // comentario: no usar acentos en comentarios
+            MostrarError($"Error critico: {ex.Message}");
             Console.WriteLine($"Stack trace: {ex.StackTrace}");
         }
 
@@ -71,13 +72,14 @@ class Program
         {
             Console.Clear();
             MostrarTitulo("MENU PRINCIPAL");
-            Console.WriteLine("1. Simulación EN VIVO con datos reales");
-            Console.WriteLine("2. Simulación con datos reales (Secuencial)");
-            Console.WriteLine("3. Simulación con datos reales (Paralela)");
+            Console.WriteLine("1. Simulacion EN VIVO con datos reales");
+            Console.WriteLine("2. Simulacion con datos reales (Secuencial)");
+            Console.WriteLine("3. Simulacion con datos reales (Paralela)");
             Console.WriteLine("4. Comparar rendimiento (Secuencial vs Paralela)");
-            Console.WriteLine("5. Análisis de Speedup con múltiples núcleos");
+            Console.WriteLine("5. Analisis de Speedup con multiples nucleos");
+            Console.WriteLine("6. Ver reportes (.txt)");
             Console.WriteLine("0. Salir");
-            Console.Write("\nElige una opción: ");
+            Console.Write("\nElige una opcion: ");
 
             var opcion = Console.ReadKey().KeyChar;
             Console.WriteLine("\n");
@@ -89,8 +91,9 @@ class Program
                 case '3': await EjecutarSimulacionParalelaAsync(); break;
                 case '4': await CompararRendimientoAsync(); break;
                 case '5': await EjecutarAnalisisSpeedupAsync(); break;
+                case '6': MenuReportes(); break; // ver reportes txt
                 case '0': return;
-                default: MostrarError("Opción inválida"); break;
+                default: MostrarError("Opcion invalida"); break;
             }
 
             if (opcion != '1')
@@ -101,13 +104,13 @@ class Program
         }
     }
 
-    #region Simulación en Vivo
+    #region Simulacion en Vivo
     static async Task EjecutarSimulacionEnVivoAsync()
     {
         Console.Clear();
         MostrarTitulo("SIMULACION EN TIEMPO REAL");
 
-        var duracionSegundos = SolicitarEntero("Duración de la simulación en segundos (30-300): ", 30, 300, 60);
+        var duracionSegundos = SolicitarEntero("Duracion de la simulacion en segundos (30-300): ", 30, 300, 60);
         var intervaloMs = SolicitarEntero("Intervalo entre emergencias en ms (500-5000): ", 500, 5000, 2000);
 
         Console.Clear();
@@ -131,7 +134,7 @@ class Program
         finally
         {
             Console.CursorVisible = true;
-            MostrarResumenFinal();
+            MostrarResumenFinal(); // genera tambien el reporte .txt
         }
     }
 
@@ -261,13 +264,24 @@ class Program
         var tiempoTotal = DateTime.Now - _inicioSimulacion;
         var tasaExito = _emergenciasGeneradas > 0 ? (double)_emergenciasAtendidas / _emergenciasGeneradas * 100 : 0;
 
-        Console.WriteLine($"Duración total: {tiempoTotal:mm\\:ss}");
+        Console.WriteLine($"Duracion total: {tiempoTotal:mm\\:ss}");
         Console.WriteLine($"Emergencias generadas: {_emergenciasGeneradas}");
         Console.WriteLine($"Emergencias atendidas: {_emergenciasAtendidas}");
-        Console.WriteLine($"Tasa de éxito: {tasaExito:F1}%");
+        Console.WriteLine($"Tasa de exito: {tasaExito:F1}%");
         Console.WriteLine($"Promedio por minuto: {_emergenciasGeneradas / Math.Max(tiempoTotal.TotalMinutes, 1):F1}");
 
-        Console.WriteLine("\nPresiona cualquier tecla para volver al menú...");
+        // genera reporte .txt para opcion 1
+        ReporteSimulacion(
+            "sim_vivo",
+            _inicioSimulacion.ToUniversalTime(),
+            DateTime.UtcNow,
+            _emergenciasGeneradas,
+            _emergenciasAtendidas,   // asignadas ~ atendidas
+            _emergenciasAtendidas,
+            0                        // reencoladas no medidas aqui
+        );
+
+        Console.WriteLine("\nPresiona cualquier tecla para volver al menu...");
         Console.ReadKey();
     }
     #endregion
@@ -283,6 +297,7 @@ class Program
 
         Console.WriteLine($"Procesando {emergencias.Count} emergencias de forma SECUENCIAL...\n");
 
+        var startUtc = DateTime.UtcNow;
         var cronometro = Stopwatch.StartNew();
         var procesadas = 0;
 
@@ -293,7 +308,7 @@ class Program
                 await ProcesarEmergenciaConDatosRealesAsync(emergencia, CancellationToken.None);
                 procesadas++;
 
-                if (procesadas % (emergencias.Count / 4) == 0 || procesadas == emergencias.Count)
+                if (procesadas % Math.Max(1, emergencias.Count / 4) == 0 || procesadas == emergencias.Count)
                     Console.WriteLine($"Progreso: {procesadas}/{emergencias.Count} ({(double)procesadas / emergencias.Count * 100:F1}%)");
             }
             catch { }
@@ -301,6 +316,17 @@ class Program
 
         cronometro.Stop();
         MostrarResultadosSimulacion("SECUENCIAL", cronometro.Elapsed, procesadas, emergencias.Count);
+
+        // reporte .txt para opcion 2
+        ReporteSimulacion(
+            "sim_secuencial",
+            startUtc,
+            DateTime.UtcNow,
+            emergencias.Count,
+            procesadas,
+            procesadas,
+            emergencias.Count - procesadas
+        );
     }
 
     static async Task EjecutarSimulacionParalelaAsync()
@@ -319,7 +345,9 @@ class Program
             CapacidadCola = cantidadEmergencias + 100
         };
 
-        Console.WriteLine($"Usando {nucleos} núcleos | Procesando {emergencias.Count} emergencias...\n");
+        Console.WriteLine($"Usando {nucleos} nucleos | Procesando {emergencias.Count} emergencias...\n");
+
+        var startUtc = DateTime.UtcNow;
 
         using var gestorParalelo = new GestorParaleloExtendido(config, recursosDisponibles: _todasBrigadas.Count);
         emergencias.ForEach(gestorParalelo.EncolarEmergencia);
@@ -329,6 +357,17 @@ class Program
 
         MostrarResultadosSimulacion("PARALELA", tiempo, procesadas, emergencias.Count);
         MostrarEstadisticasParalelismo(stats);
+
+        // reporte .txt para opcion 3
+        ReporteSimulacion(
+            "sim_paralela",
+            startUtc,
+            DateTime.UtcNow,
+            emergencias.Count,
+            procesadas,
+            procesadas,
+            emergencias.Count - procesadas
+        );
     }
 
     static async Task CompararRendimientoAsync()
@@ -339,13 +378,22 @@ class Program
         var cantidadEmergencias = SolicitarCantidadEmergencias();
         var emergencias = GenerarEmergenciasReales(cantidadEmergencias);
 
-        Console.WriteLine("Ejecutando versión secuencial...");
+        Console.WriteLine("Ejecutando version secuencial...");
         var tiempoSecuencial = await MedirTiempoSecuencialAsync(emergencias);
 
-        Console.WriteLine("Ejecutando versión paralela...");
+        Console.WriteLine("Ejecutando version paralela...");
         var tiempoParalelo = await MedirTiempoParaleloAsync(emergencias);
 
         MostrarComparacionResultados(tiempoSecuencial, tiempoParalelo);
+
+        // reporte .txt para opcion 4
+        ReporteComparacion(
+            "comparacion_seq_vs_par",
+            tiempoSecuencial.TotalMilliseconds,
+            tiempoParalelo.TotalMilliseconds,
+            Math.Max(2, Environment.ProcessorCount),
+            emergencias.Count
+        );
     }
 
     static void MostrarComparacionResultados(TimeSpan tiempoSecuencial, TimeSpan tiempoParalelo)
@@ -360,9 +408,9 @@ class Program
             var speedup = tiempoSecuencial.TotalSeconds / tiempoParalelo.TotalSeconds;
             var eficiencia = speedup / Environment.ProcessorCount * 100;
 
-            Console.WriteLine($"Aceleración (Speedup): {speedup:F2}x");
+            Console.WriteLine($"Aceleracion (Speedup): {speedup:F2}x");
             Console.WriteLine($"Eficiencia: {eficiencia:F1}%");
-            Console.WriteLine($"Núcleos utilizados: {Environment.ProcessorCount}");
+            Console.WriteLine($"Nucleos utilizados: {Environment.ProcessorCount}");
 
             var evaluacion = speedup > 1.5 ? "mejora significativa" :
                            speedup > 1.0 ? "mejora modesta" : "sin ventajas";
@@ -371,7 +419,7 @@ class Program
     }
     #endregion
 
-    #region Análisis de Speedup
+    #region Analisis de Speedup
     static async Task EjecutarAnalisisSpeedupAsync()
     {
         Console.Clear();
@@ -382,18 +430,17 @@ class Program
         var configuracionesNucleos = new[] { 1, 2, 4, 8, 16, Environment.ProcessorCount }
             .Where(n => n <= Environment.ProcessorCount).Distinct().OrderBy(x => x).ToArray();
 
-        Console.WriteLine($"Sistema: {Environment.ProcessorCount} núcleos | Configuraciones: {string.Join(", ", configuracionesNucleos)}\n");
+        Console.WriteLine($"Sistema: {Environment.ProcessorCount} nucleos | Configuraciones: {string.Join(", ", configuracionesNucleos)}\n");
 
-        // Baseline secuencial
+        // baseline secuencial
         Console.WriteLine("Midiendo tiempo secuencial...");
         var tiempoSecuencial = await MedirTiempoSecuencialAsync(emergencias);
 
         var resultados = new List<ResultadoSpeedup>();
 
-        // Probar cada configuración
         foreach (var nucleos in configuracionesNucleos)
         {
-            Console.WriteLine($"Probando con {nucleos} núcleo{(nucleos == 1 ? "" : "s")}...");
+            Console.WriteLine($"Probando con {nucleos} nucleo{(nucleos == 1 ? "" : "s")}...");
 
             try
             {
@@ -411,15 +458,27 @@ class Program
                     Estadisticas = stats
                 });
 
-                Console.WriteLine($"   {nucleos} núcleos: {tiempoParalelo.TotalSeconds:F2}s | Speedup: {speedup:F2}x | Eficiencia: {eficiencia:F1}%");
+                Console.WriteLine($"   {nucleos} nucleos: {tiempoParalelo.TotalSeconds:F2}s | Speedup: {speedup:F2}x | Eficiencia: {eficiencia:F1}%");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"   Error con {nucleos} núcleos: {ex.Message}");
+                Console.WriteLine($"   Error con {nucleos} nucleos: {ex.Message}");
             }
         }
 
         MostrarAnalisisSpeedupCompleto(resultados, tiempoSecuencial, cantidadEmergencias);
+
+        // reporte .txt para opcion 5
+        var mediciones = resultados
+            .OrderBy(r => r.Nucleos)
+            .Select(r => (hilos: r.Nucleos, ms: r.TiempoParalelo.TotalMilliseconds))
+            .ToArray();
+
+        ReporteSpeedupSweep(
+            "speedup_multinucleo",
+            mediciones,
+            tiempoSecuencial.TotalMilliseconds
+        );
     }
 
     static void MostrarAnalisisSpeedupCompleto(List<ResultadoSpeedup> resultados, TimeSpan tiempoSecuencial, int totalEmergencias)
@@ -427,9 +486,8 @@ class Program
         Console.WriteLine("\n" + new string('=', 80));
         MostrarTitulo("ANALISIS COMPLETO DE SPEEDUP Y EFICIENCIA");
 
-        // Tabla de resultados
         Console.WriteLine("┌─────────┬──────────────┬──────────────┬───────────┬─────────────┐");
-        Console.WriteLine("│ Núcleos │   Tiempo (s) │   Speedup    │ Eficiencia │  Throughput │");
+        Console.WriteLine("│ Nucleos │   Tiempo (s) │   Speedup    │ Eficiencia │  Throughput │");
         Console.WriteLine("├─────────┼──────────────┼──────────────┼───────────┼─────────────┤");
 
         foreach (var resultado in resultados.OrderBy(r => r.Nucleos))
@@ -440,7 +498,6 @@ class Program
 
         Console.WriteLine("└─────────┴──────────────┴──────────────┴───────────┴─────────────┘\n");
 
-        // Análisis y recomendaciones
         MostrarRecomendaciones(resultados);
     }
 
@@ -451,8 +508,8 @@ class Program
 
         Console.WriteLine("RECOMENDACIONES");
         Console.WriteLine("===============");
-        Console.WriteLine($"Configuración óptima: {puntoOptimo.Nucleos} núcleos (mejor ratio costo/beneficio)");
-        Console.WriteLine($"Mejor speedup absoluto: {mejorSpeedup.Speedup:F2}x con {mejorSpeedup.Nucleos} núcleos");
+        Console.WriteLine($"Configuracion optima: {puntoOptimo.Nucleos} nucleos (mejor ratio costo/beneficio)");
+        Console.WriteLine($"Mejor speedup absoluto: {mejorSpeedup.Speedup:F2}x con {mejorSpeedup.Nucleos} nucleos");
 
         var escalabilidad = mejorSpeedup.Speedup / mejorSpeedup.Nucleos;
         var evaluacion = escalabilidad > 0.8 ? "Excelente" : escalabilidad > 0.6 ? "Buena" : escalabilidad > 0.4 ? "Regular" : "Limitada";
@@ -470,7 +527,7 @@ class Program
     }
     #endregion
 
-    #region Métodos de Utilidad
+    #region Metodos de Utilidad
     static int SolicitarEntero(string mensaje, int min, int max, int defaultValue)
     {
         Console.Write(mensaje);
@@ -484,7 +541,7 @@ class Program
             Console.Write("Cantidad de emergencias a simular (50-1000): ");
             if (int.TryParse(Console.ReadLine(), out int cantidad) && cantidad >= 50 && cantidad <= 1000)
                 return cantidad;
-            Console.WriteLine("Por favor ingresa un número entre 50 y 1000");
+            Console.WriteLine("Por favor ingresa un numero entre 50 y 1000");
         }
     }
 
@@ -580,11 +637,32 @@ class Program
     static async Task<(string brigada, TimeSpan tiempo)> ProcesarEmergenciaConDatosRealesAsync(EmergenciaEvento emergencia, CancellationToken ct)
     {
         var brigadaMasCercana = EncontrarBrigadaMasCercana(emergencia);
+
+        // marcar ocupada de forma segura (evita error si el enum real tiene otro nombre)
+        CambiarEstadoBrigada(brigadaMasCercana, "AtendiendoEmergencia", "Ocupado", "EnServicio");
+
         var tiempoBase = CalcularTiempoRespuesta(emergencia, brigadaMasCercana);
         var tiempoFinal = Math.Max(50, tiempoBase + _random.Next(-50, 150));
 
         await Task.Delay(tiempoFinal, ct);
+
+        // devolver a disponible de forma segura
+        CambiarEstadoBrigada(brigadaMasCercana, "Disponible");
+
         return (brigadaMasCercana.Nombre, TimeSpan.FromMilliseconds(tiempoFinal));
+    }
+
+    // helper: intenta varios nombres de estado, sin romper si no existen
+    static void CambiarEstadoBrigada(Brigada b, params string[] posiblesNombres)
+    {
+        foreach (var name in posiblesNombres)
+        {
+            if (Enum.TryParse<EstadoBrigada>(name, true, out var estado))
+            {
+                try { b.CambiarEstado(estado); } catch { }
+                return;
+            }
+        }
     }
 
     static Brigada EncontrarBrigadaMasCercana(EmergenciaEvento emergencia)
@@ -600,14 +678,6 @@ class Program
             return _todasBrigadas.First();
 
         var brigada = brigadasCapaces.OrderBy(b => b.UbicacionActual.CalcularDistanciaKm(emergencia.Ubicacion)).First();
-        brigada.CambiarEstado(EstadoBrigada.AtendendoEmergencia);
-
-        _ = Task.Run(async () =>
-        {
-            await Task.Delay(_random.Next(5000, 15000));
-            brigada.CambiarEstado(EstadoBrigada.Disponible);
-        });
-
         return brigada;
     }
 
@@ -639,7 +709,7 @@ class Program
         Console.WriteLine("=" + new string('=', 20 + modo.Length));
         Console.WriteLine($"Total emergencias: {total}");
         Console.WriteLine($"Procesadas: {procesadas}");
-        Console.WriteLine($"Tasa de éxito: {(double)procesadas / total * 100:F1}%");
+        Console.WriteLine($"Tasa de exito: {(double)procesadas / total * 100:F1}%");
         Console.WriteLine($"Tiempo total: {tiempo.TotalSeconds:F2} segundos");
         Console.WriteLine($"Throughput: {procesadas / Math.Max(tiempo.TotalSeconds, 0.1):F1} emergencias/segundo");
     }
@@ -693,7 +763,7 @@ class Program
         return (tiempo, gestor.ObtenerEstadisticas());
     }
 
-    // Métodos de formato y colores
+    // Metodos de formato y colores
     static void MostrarTitulo(string titulo)
     {
         Console.ForegroundColor = ConsoleColor.Cyan;
@@ -722,5 +792,156 @@ class Program
         Console.WriteLine(mensaje);
         Console.ResetColor();
     }
+
+    // ================= Reportes TXT (helpers internos a Program) =================
+
+    static string OutDirReportes =>
+        Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "resultados-reportes"));
+
+    // genera una tabla ascii simple
+    static string BuildTextTable(string title, string[] headers, string[][] rows)
+    {
+        int cols = headers.Length;
+        int[] widths = new int[cols];
+        for (int c = 0; c < cols; c++)
+            widths[c] = Math.Max(headers[c]?.Length ?? 0, rows.Length > 0 ? rows.Max(r => (r[c]?.Length ?? 0)) : 0);
+
+        string Line(char corner, char dash)
+        {
+            var parts = widths.Select(w => new string(dash, w + 2));
+            return corner + string.Join(corner, parts) + corner;
+        }
+
+        string Row(string[] vals)
+        {
+            var padded = vals.Select((v, i) => " " + (v ?? "").PadRight(widths[i]) + " ");
+            return "|" + string.Join("|", padded) + "|";
+        }
+
+        var top = Line('+', '=');
+        var sep = Line('+', '-');
+
+        var sb = new System.Text.StringBuilder();
+        if (!string.IsNullOrWhiteSpace(title))
+        {
+            sb.AppendLine(title);
+            sb.AppendLine(new string('=', Math.Max(title.Length, 10)));
+        }
+        sb.AppendLine(top);
+        sb.AppendLine(Row(headers));
+        sb.AppendLine(sep);
+        foreach (var r in rows) sb.AppendLine(Row(r));
+        sb.AppendLine(top);
+        return sb.ToString();
+    }
+
+    // guarda texto en resultados-reportes con timestamp
+    static string SaveReport(string baseName, string content)
+    {
+        Directory.CreateDirectory(OutDirReportes);
+        var file = $"{DateTime.Now:yyyyMMdd_HHmmss}_{baseName}.txt";
+        var path = Path.Combine(OutDirReportes, file);
+        File.WriteAllText(path, content);
+        return path;
+    }
+
+    // Reporte de simulacion (opciones 1,2,3)
+    static void ReporteSimulacion(string baseName, DateTime startUtc, DateTime endUtc,
+                                  int generadas, int asignadas, int atendidas, int reencoladas)
+    {
+        var dur = endUtc - startUtc;
+        double secs = Math.Max(0.001, dur.TotalSeconds);
+        double throughput = atendidas / secs;
+
+        var headers = new[] { "Metrica", "Valor" };
+        var rows = new[]
+        {
+            new[] { "Inicio UTC", startUtc.ToString("yyyy-MM-dd HH:mm:ss") },
+            new[] { "Fin UTC",    endUtc.ToString("yyyy-MM-dd HH:mm:ss") },
+            new[] { "Duracion (s)", dur.TotalSeconds.ToString("0.00") },
+            new[] { "Llamadas generadas", generadas.ToString() },
+            new[] { "Llamadas asignadas", asignadas.ToString() },
+            new[] { "Llamadas atendidas", atendidas.ToString() },
+            new[] { "Llamadas reencoladas", reencoladas.ToString() },
+            new[] { "Throughput (atenciones/s)", throughput.ToString("0.00") }
+        };
+
+        var tabla = BuildTextTable($"REPORTE {baseName.ToUpperInvariant()}", headers, rows);
+        var path = TextReporter.Save($"{baseName}_reporte", tabla);
+
+        Console.WriteLine($"OK: {path}");
+    }
+
+    // Reporte de comparacion (opcion 4)
+    static void ReporteComparacion(string baseName, double tSeqMs, double tParMs, int p, int iteraciones)
+    {
+        double speedup = tSeqMs / Math.Max(1.0, tParMs);
+        double eficiencia = speedup / Math.Max(1.0, p) * 100.0;
+
+        var headers = new[] { "Campo", "Valor" };
+        var rows = new[]
+        {
+            new[] { "Iteraciones", iteraciones.ToString() },
+            new[] { "P (hilos)", p.ToString() },
+            new[] { "T secuencial (ms)", tSeqMs.ToString("0") },
+            new[] { "T paralelo (ms)", tParMs.ToString("0") },
+            new[] { "Speedup (x)", speedup.ToString("0.00") },
+            new[] { "Eficiencia (%)", eficiencia.ToString("0.0") }
+        };
+
+        var tabla = BuildTextTable($"REPORTE {baseName.ToUpperInvariant()}", headers, rows);
+        var path = TextReporter.Save($"{baseName}_reporte", tabla);
+
+        Console.WriteLine($"OK: {path}");
+    }
+
+    // Reporte de barrido de speedup (opcion 5)
+    static void ReporteSpeedupSweep(string baseName, (int hilos, double ms)[] mediciones, double tBaseMs)
+    {
+        var headers = new[] { "Hilos", "T par (ms)", "Speedup", "Eficiencia (%)" };
+        var rows = mediciones.Select(m =>
+        {
+            double s = tBaseMs / Math.Max(1.0, m.ms);
+            double e = s / Math.Max(1.0, m.hilos) * 100.0;
+            return new[] { m.hilos.ToString(), m.ms.ToString("0"), s.ToString("0.00"), e.ToString("0.0") };
+        }).ToArray();
+
+        var tabla = BuildTextTable($"REPORTE {baseName.ToUpperInvariant()}", headers, rows);
+        var path = TextReporter.Save($"{baseName}_reporte", tabla);
+
+        Console.WriteLine($"OK: {path}");
+    }
+
+    // Menu basico para abrir carpeta de reportes
+    static void MenuReportes()
+    {
+        var outDir = OutDirReportes;
+        while (true)
+        {
+            Console.WriteLine();
+            Console.WriteLine("=== Reportes TXT ===");
+            Console.WriteLine("1) Abrir carpeta resultados-reportes");
+            Console.WriteLine("0) Volver");
+            Console.Write("Opcion: ");
+            var k = Console.ReadKey(intercept: true).KeyChar;
+            Console.WriteLine();
+            if (k == '1')
+            {
+                try
+                {
+                    var psi = new System.Diagnostics.ProcessStartInfo
+                    {
+                        FileName = outDir,
+                        UseShellExecute = true
+                    };
+                    System.Diagnostics.Process.Start(psi);
+                }
+                catch (Exception ex) { Console.WriteLine("No se pudo abrir: " + ex.Message); }
+            }
+            else if (k == '0') break;
+            else Console.WriteLine("Opcion invalida");
+        }
+    }
+
     #endregion
 }
