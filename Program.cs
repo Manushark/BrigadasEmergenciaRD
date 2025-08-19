@@ -180,3 +180,193 @@ class Program
         }
         catch (OperationCanceledException) { }
     }
+
+    static async Task MostrarPantallaEnVivoAsync(CancellationToken ct)
+    {
+        while (!ct.IsCancellationRequested)
+        {
+            try
+            {
+                MostrarEstadisticasEnVivo();
+                await Task.Delay(1000, ct);
+            }
+            catch (OperationCanceledException) { break; }
+        }
+    }
+
+    static void MostrarEstadisticasEnVivo()
+    {
+        lock (_lockConsole)
+        {
+            var pos = (Console.CursorTop, Console.CursorLeft);
+            Console.SetCursorPosition(0, 0);
+            Console.BackgroundColor = ConsoleColor.DarkBlue;
+            Console.ForegroundColor = ConsoleColor.White;
+
+            var tiempoTranscurrido = DateTime.Now - _inicioSimulacion;
+            var brigadasDisponibles = _todasBrigadas.Count(b => b.Estado == EstadoBrigada.Disponible);
+
+            Console.WriteLine($" BRIGADAS RD - EN VIVO {DateTime.Now:HH:mm:ss} | T: {tiempoTranscurrido:mm\\:ss} | Gen: {_emergenciasGeneradas} | Atend: {_emergenciasAtendidas} | Servicio: {_brigadasEnServicio} | Disp: {brigadasDisponibles}                    ");
+            Console.WriteLine($"                                                                                                                                                                   ");
+
+            Console.ResetColor();
+            Console.SetCursorPosition(pos.CursorLeft, Math.Max(3, pos.CursorTop));
+        }
+    }
+
+    static void MostrarDespachoEnVivo(EmergenciaEvento emergencia, Brigada brigada)
+    {
+        lock (_lockConsole)
+        {
+            var ubicacion = ObtenerUbicacionCompleta(emergencia);
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write($"EMERGENCIA: ");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write($"{emergencia.Tipo}");
+            Console.ResetColor();
+            Console.Write($" en {ubicacion}");
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine($"   Despachando: {brigada.Nombre} ({brigada.Tipo}) | Afectadas: {emergencia.PersonasAfectadas} | Intensidad: {emergencia.Intensidad}");
+            Console.ResetColor();
+        }
+    }
+
+    static void MostrarEmergenciaResuelta(EmergenciaEvento emergencia, Brigada brigada)
+    {
+        lock (_lockConsole)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"   Emergencia #{emergencia.Id} resuelta por {brigada.Nombre}");
+            Console.ResetColor();
+        }
+    }
+
+    static void MostrarEmergenciaSinBrigada(EmergenciaEvento emergencia)
+    {
+        lock (_lockConsole)
+        {
+            var provincia = _provincias.FirstOrDefault(p => p.Id == emergencia.ProvinciaId);
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"   Sin brigadas disponibles para emergencia en {provincia?.Nombre}");
+            Console.ResetColor();
+        }
+    }
+
+    static void MostrarResumenFinal()
+    {
+        Console.WriteLine("\n");
+        MostrarTitulo("RESUMEN DE SIMULACION EN VIVO");
+
+        var tiempoTotal = DateTime.Now - _inicioSimulacion;
+        var tasaExito = _emergenciasGeneradas > 0 ? (double)_emergenciasAtendidas / _emergenciasGeneradas * 100 : 0;
+
+        Console.WriteLine($"Duración total: {tiempoTotal:mm\\:ss}");
+        Console.WriteLine($"Emergencias generadas: {_emergenciasGeneradas}");
+        Console.WriteLine($"Emergencias atendidas: {_emergenciasAtendidas}");
+        Console.WriteLine($"Tasa de éxito: {tasaExito:F1}%");
+        Console.WriteLine($"Promedio por minuto: {_emergenciasGeneradas / Math.Max(tiempoTotal.TotalMinutes, 1):F1}");
+
+        Console.WriteLine("\nPresiona cualquier tecla para volver al menú...");
+        Console.ReadKey();
+    }
+    #endregion
+
+    #region Simulaciones Secuencial y Paralela
+    static async Task EjecutarSimulacionSecuencialAsync()
+    {
+        Console.WriteLine("SIMULACION SECUENCIAL CON DATOS REALES");
+        Console.WriteLine("======================================\n");
+
+        var cantidadEmergencias = SolicitarCantidadEmergencias();
+        var emergencias = GenerarEmergenciasReales(cantidadEmergencias);
+
+        Console.WriteLine($"Procesando {emergencias.Count} emergencias de forma SECUENCIAL...\n");
+
+        var cronometro = Stopwatch.StartNew();
+        var procesadas = 0;
+
+        foreach (var emergencia in emergencias)
+        {
+            try
+            {
+                await ProcesarEmergenciaConDatosRealesAsync(emergencia, CancellationToken.None);
+                procesadas++;
+
+                if (procesadas % (emergencias.Count / 4) == 0 || procesadas == emergencias.Count)
+                    Console.WriteLine($"Progreso: {procesadas}/{emergencias.Count} ({(double)procesadas / emergencias.Count * 100:F1}%)");
+            }
+            catch { }
+        }
+
+        cronometro.Stop();
+        MostrarResultadosSimulacion("SECUENCIAL", cronometro.Elapsed, procesadas, emergencias.Count);
+    }
+
+    static async Task EjecutarSimulacionParalelaAsync()
+    {
+        Console.WriteLine("SIMULACION PARALELA CON DATOS REALES");
+        Console.WriteLine("====================================\n");
+
+        var cantidadEmergencias = SolicitarCantidadEmergencias();
+        var emergencias = GenerarEmergenciasReales(cantidadEmergencias);
+        var nucleos = Environment.ProcessorCount;
+
+        var config = new ConfigParalelo
+        {
+            MaxGradoParalelismo = nucleos,
+            HabilitarMetricas = true,
+            CapacidadCola = cantidadEmergencias + 100
+        };
+
+        Console.WriteLine($"Usando {nucleos} núcleos | Procesando {emergencias.Count} emergencias...\n");
+
+        using var gestorParalelo = new GestorParaleloExtendido(config, recursosDisponibles: _todasBrigadas.Count);
+        emergencias.ForEach(gestorParalelo.EncolarEmergencia);
+
+        var (tiempo, procesadas) = await gestorParalelo.ProcesarEnParaleloAsync(ProcesarEmergenciaConDatosRealesAsync);
+        var stats = gestorParalelo.ObtenerEstadisticas();
+
+        MostrarResultadosSimulacion("PARALELA", tiempo, procesadas, emergencias.Count);
+        MostrarEstadisticasParalelismo(stats);
+    }
+
+    static async Task CompararRendimientoAsync()
+    {
+        Console.WriteLine("COMPARACION DE RENDIMIENTO");
+        Console.WriteLine("==========================\n");
+
+        var cantidadEmergencias = SolicitarCantidadEmergencias();
+        var emergencias = GenerarEmergenciasReales(cantidadEmergencias);
+
+        Console.WriteLine("Ejecutando versión secuencial...");
+        var tiempoSecuencial = await MedirTiempoSecuencialAsync(emergencias);
+
+        Console.WriteLine("Ejecutando versión paralela...");
+        var tiempoParalelo = await MedirTiempoParaleloAsync(emergencias);
+
+        MostrarComparacionResultados(tiempoSecuencial, tiempoParalelo);
+    }
+
+    static void MostrarComparacionResultados(TimeSpan tiempoSecuencial, TimeSpan tiempoParalelo)
+    {
+        Console.WriteLine("\nRESULTADOS DE COMPARACION");
+        Console.WriteLine("========================");
+        Console.WriteLine($"Tiempo secuencial:  {tiempoSecuencial.TotalSeconds:F2} segundos");
+        Console.WriteLine($"Tiempo paralelo:    {tiempoParalelo.TotalSeconds:F2} segundos");
+
+        if (tiempoParalelo.TotalSeconds > 0)
+        {
+            var speedup = tiempoSecuencial.TotalSeconds / tiempoParalelo.TotalSeconds;
+            var eficiencia = speedup / Environment.ProcessorCount * 100;
+
+            Console.WriteLine($"Aceleración (Speedup): {speedup:F2}x");
+            Console.WriteLine($"Eficiencia: {eficiencia:F1}%");
+            Console.WriteLine($"Núcleos utilizados: {Environment.ProcessorCount}");
+
+            var evaluacion = speedup > 1.5 ? "mejora significativa" :
+                           speedup > 1.0 ? "mejora modesta" : "sin ventajas";
+            Console.WriteLine($"El paralelismo ofrece {evaluacion}");
+        }
+    }
+    #endregion
