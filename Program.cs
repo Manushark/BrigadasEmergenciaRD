@@ -468,5 +468,259 @@ class Program
         public double Eficiencia { get; set; }
         public EstadisticasParalelismo Estadisticas { get; set; }
     }
- #endregion
+    #endregion
 
+    #region Métodos de Utilidad
+    static int SolicitarEntero(string mensaje, int min, int max, int defaultValue)
+    {
+        Console.Write(mensaje);
+        return int.TryParse(Console.ReadLine(), out int valor) && valor >= min && valor <= max ? valor : defaultValue;
+    }
+
+    static int SolicitarCantidadEmergencias()
+    {
+        while (true)
+        {
+            Console.Write("Cantidad de emergencias a simular (50-1000): ");
+            if (int.TryParse(Console.ReadLine(), out int cantidad) && cantidad >= 50 && cantidad <= 1000)
+                return cantidad;
+            Console.WriteLine("Por favor ingresa un número entre 50 y 1000");
+        }
+    }
+
+    static List<EmergenciaEvento> GenerarEmergenciasReales(int cantidad)
+    {
+        var emergencias = new List<EmergenciaEvento>();
+        var tipos = Enum.GetValues<TipoEmergencia>();
+
+        for (int i = 0; i < cantidad; i++)
+        {
+            var provincia = _provincias[_random.Next(_provincias.Count)];
+            var municipio = provincia.Municipios[_random.Next(provincia.Municipios.Count)];
+            var barrio = municipio.Barrios.Count > 0 ? municipio.Barrios[_random.Next(municipio.Barrios.Count)] : null;
+            var coordenadas = barrio?.Coordenadas ?? municipio.Coordenadas;
+            var tipoEmergencia = tipos[_random.Next(tipos.Length)];
+
+            emergencias.Add(new EmergenciaEvento
+            {
+                Id = i + 1,
+                Tipo = tipoEmergencia,
+                ProvinciaId = provincia.Id,
+                MunicipioId = municipio.Id,
+                BarrioId = barrio?.Id ?? municipio.Id,
+                PersonasAfectadas = GenerarPersonasAfectadas(tipoEmergencia),
+                Intensidad = GenerarIntensidad(provincia.VulnerabilidadClimatica),
+                Ubicacion = new Coordenada(
+                    coordenadas.Latitud + (_random.NextDouble() - 0.5) * 0.01,
+                    coordenadas.Longitud + (_random.NextDouble() - 0.5) * 0.01),
+                Descripcion = $"{tipoEmergencia} en {barrio?.Nombre ?? municipio.Nombre}, {municipio.Nombre}",
+                Timestamp = DateTime.Now.AddMinutes(-_random.Next(0, 180))
+            });
+        }
+        return emergencias;
+    }
+
+    static EmergenciaEvento GenerarEmergenciaAleatoria()
+    {
+        var tipos = Enum.GetValues<TipoEmergencia>();
+        var provincia = _provincias[_random.Next(_provincias.Count)];
+        var municipio = provincia.Municipios[_random.Next(provincia.Municipios.Count)];
+        var barrio = municipio.Barrios.Count > 0 ? municipio.Barrios[_random.Next(municipio.Barrios.Count)] : null;
+        var coordenadas = barrio?.Coordenadas ?? municipio.Coordenadas;
+        var tipoEmergencia = tipos[_random.Next(tipos.Length)];
+
+        return new EmergenciaEvento
+        {
+            Id = _random.Next(100000, 999999),
+            Tipo = tipoEmergencia,
+            ProvinciaId = provincia.Id,
+            MunicipioId = municipio.Id,
+            BarrioId = barrio?.Id ?? municipio.Id,
+            PersonasAfectadas = GenerarPersonasAfectadas(tipoEmergencia),
+            Intensidad = GenerarIntensidad(provincia.VulnerabilidadClimatica),
+            Ubicacion = new Coordenada(
+                coordenadas.Latitud + (_random.NextDouble() - 0.5) * 0.01,
+                coordenadas.Longitud + (_random.NextDouble() - 0.5) * 0.01),
+            Descripcion = $"{tipoEmergencia} en {barrio?.Nombre ?? municipio.Nombre}, {municipio.Nombre}",
+            Timestamp = DateTime.Now
+        };
+    }
+
+    static string ObtenerUbicacionCompleta(EmergenciaEvento emergencia)
+    {
+        var provincia = _provincias.FirstOrDefault(p => p.Id == emergencia.ProvinciaId);
+        var municipio = provincia?.Municipios.FirstOrDefault(m => m.Id == emergencia.MunicipioId);
+        var barrio = municipio?.Barrios.FirstOrDefault(b => b.Id == emergencia.BarrioId);
+
+        return $"{provincia?.Nombre} -> {municipio?.Nombre} -> {barrio?.Nombre ?? "N/A"}";
+    }
+
+    static int GenerarPersonasAfectadas(TipoEmergencia tipo) => tipo switch
+    {
+        TipoEmergencia.PersonasAtrapadas => _random.Next(1, 8),
+        TipoEmergencia.IncendioEstructural => _random.Next(5, 25),
+        TipoEmergencia.EmergenciaMedica => _random.Next(1, 3),
+        TipoEmergencia.Inundacion => _random.Next(10, 100),
+        TipoEmergencia.DeslizamientoTierra => _random.Next(3, 20),
+        TipoEmergencia.AccidenteVehicular => _random.Next(1, 6),
+        _ => _random.Next(1, 10)
+    };
+
+    static IntensidadTormenta GenerarIntensidad(string vulnerabilidadClimatica)
+    {
+        var intensidades = Enum.GetValues<IntensidadTormenta>();
+        return vulnerabilidadClimatica switch
+        {
+            "Alta" => intensidades[_random.Next(2, 4)],
+            "Media" => intensidades[_random.Next(1, 3)],
+            _ => intensidades[_random.Next(0, 2)]
+        };
+    }
+
+    static async Task<(string brigada, TimeSpan tiempo)> ProcesarEmergenciaConDatosRealesAsync(EmergenciaEvento emergencia, CancellationToken ct)
+    {
+        var brigadaMasCercana = EncontrarBrigadaMasCercana(emergencia);
+        var tiempoBase = CalcularTiempoRespuesta(emergencia, brigadaMasCercana);
+        var tiempoFinal = Math.Max(50, tiempoBase + _random.Next(-50, 150));
+
+        await Task.Delay(tiempoFinal, ct);
+        return (brigadaMasCercana.Nombre, TimeSpan.FromMilliseconds(tiempoFinal));
+    }
+
+    static Brigada EncontrarBrigadaMasCercana(EmergenciaEvento emergencia)
+    {
+        var brigadasCapaces = _todasBrigadas
+            .Where(b => b.Estado == EstadoBrigada.Disponible && b.PuedeAtender(emergencia.Tipo))
+            .ToList();
+
+        if (!brigadasCapaces.Any())
+            brigadasCapaces = _todasBrigadas.Where(b => b.Estado == EstadoBrigada.Disponible).ToList();
+
+        if (!brigadasCapaces.Any())
+            return _todasBrigadas.First();
+
+        var brigada = brigadasCapaces.OrderBy(b => b.UbicacionActual.CalcularDistanciaKm(emergencia.Ubicacion)).First();
+        brigada.CambiarEstado(EstadoBrigada.AtendendoEmergencia);
+
+        _ = Task.Run(async () =>
+        {
+            await Task.Delay(_random.Next(5000, 15000));
+            brigada.CambiarEstado(EstadoBrigada.Disponible);
+        });
+
+        return brigada;
+    }
+
+    static int CalcularTiempoRespuesta(EmergenciaEvento emergencia, Brigada brigada)
+    {
+        var tiempoBase = emergencia.Tipo switch
+        {
+            TipoEmergencia.PersonasAtrapadas => 300,
+            TipoEmergencia.IncendioEstructural => 400,
+            TipoEmergencia.EmergenciaMedica => 200,
+            TipoEmergencia.Inundacion => 350,
+            TipoEmergencia.DeslizamientoTierra => 450,
+            TipoEmergencia.AccidenteVehicular => 250,
+            TipoEmergencia.VientosFuertes => 300,
+            TipoEmergencia.CorteEnergia => 500,
+            _ => 250
+        };
+
+        var distancia = brigada.UbicacionActual.CalcularDistanciaKm(emergencia.Ubicacion);
+        var ajusteDistancia = (int)(distancia * 10);
+        var ajusteIntensidad = (int)emergencia.Intensidad * 50;
+
+        return tiempoBase + ajusteDistancia + ajusteIntensidad;
+    }
+
+    static void MostrarResultadosSimulacion(string modo, TimeSpan tiempo, int procesadas, int total)
+    {
+        Console.WriteLine($"\nRESULTADOS - MODO {modo}");
+        Console.WriteLine("=" + new string('=', 20 + modo.Length));
+        Console.WriteLine($"Total emergencias: {total}");
+        Console.WriteLine($"Procesadas: {procesadas}");
+        Console.WriteLine($"Tasa de éxito: {(double)procesadas / total * 100:F1}%");
+        Console.WriteLine($"Tiempo total: {tiempo.TotalSeconds:F2} segundos");
+        Console.WriteLine($"Throughput: {procesadas / Math.Max(tiempo.TotalSeconds, 0.1):F1} emergencias/segundo");
+    }
+
+    static void MostrarEstadisticasParalelismo(EstadisticasParalelismo stats)
+    {
+        Console.WriteLine($"\nESTADISTICAS DE PARALELISMO");
+        Console.WriteLine("===========================");
+        Console.WriteLine($"Hilos concurrentes: {stats.MaximoHilosConcurrentes}");
+        Console.WriteLine($"Tareas totales: {stats.TotalTareasEjecutadas}");
+        Console.WriteLine($"Tareas en paralelo: {stats.TareasEjecutadasEnParalelo}");
+
+        if (stats.MedicionesPorHilo.Any())
+        {
+            var minTareas = stats.MedicionesPorHilo.Min(m => m.TareasCompletadas);
+            var maxTareas = stats.MedicionesPorHilo.Max(m => m.TareasCompletadas);
+            var desbalance = maxTareas > 0 ? (double)(maxTareas - minTareas) / maxTareas * 100 : 0;
+            Console.WriteLine($"Balance de carga: {desbalance:F1}% desbalance");
+        }
+    }
+
+    static async Task<TimeSpan> MedirTiempoSecuencialAsync(List<EmergenciaEvento> emergencias)
+    {
+        var cronometro = Stopwatch.StartNew();
+        foreach (var emergencia in emergencias)
+        {
+            try { await ProcesarEmergenciaConDatosRealesAsync(emergencia, CancellationToken.None); }
+            catch { }
+        }
+        cronometro.Stop();
+        return cronometro.Elapsed;
+    }
+
+    static async Task<TimeSpan> MedirTiempoParaleloAsync(List<EmergenciaEvento> emergencias)
+    {
+        var config = new ConfigParalelo { MaxGradoParalelismo = Environment.ProcessorCount, HabilitarMetricas = true };
+        using var gestor = new GestorParaleloExtendido(config, recursosDisponibles: _todasBrigadas.Count);
+
+        emergencias.ForEach(gestor.EncolarEmergencia);
+        var (tiempo, _) = await gestor.ProcesarEnParaleloAsync(ProcesarEmergenciaConDatosRealesAsync);
+        return tiempo;
+    }
+
+    static async Task<(TimeSpan tiempo, EstadisticasParalelismo stats)> MedirTiempoParaleloConNucleosAsync(List<EmergenciaEvento> emergencias, int nucleos)
+    {
+        var config = new ConfigParalelo { MaxGradoParalelismo = nucleos, HabilitarMetricas = true };
+        using var gestor = new GestorParaleloExtendido(config, recursosDisponibles: _todasBrigadas.Count);
+
+        emergencias.ForEach(gestor.EncolarEmergencia);
+        var (tiempo, _) = await gestor.ProcesarEnParaleloAsync(ProcesarEmergenciaConDatosRealesAsync);
+        return (tiempo, gestor.ObtenerEstadisticas());
+    }
+
+    // Métodos de formato y colores
+    static void MostrarTitulo(string titulo)
+    {
+        Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.WriteLine(titulo);
+        Console.WriteLine(new string('=', titulo.Length));
+        Console.ResetColor();
+    }
+
+    static void MostrarInfo(string mensaje)
+    {
+        Console.ForegroundColor = ConsoleColor.Blue;
+        Console.WriteLine(mensaje);
+        Console.ResetColor();
+    }
+
+    static void MostrarExito(string mensaje)
+    {
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine(mensaje);
+        Console.ResetColor();
+    }
+
+    static void MostrarError(string mensaje)
+    {
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine(mensaje);
+        Console.ResetColor();
+    }
+    #endregion
+}
