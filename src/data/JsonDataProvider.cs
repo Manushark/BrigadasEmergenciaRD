@@ -192,6 +192,40 @@ namespace BrigadasEmergenciaRD.Data
 
             _provinciasCache = provincias;
         }
+        public async Task<List<Provincia>> ObtenerDatosCompletosAsync()
+        {
+            var provincias = (await ObtenerProvinciasAsync()).ToList();
+
+            foreach (var provincia in provincias)
+            {
+                // Cargar municipios
+                var municipios = (await ObtenerMunicipiosAsync(provincia.Id)).ToList();
+                provincia.Municipios = municipios;
+
+                // Para cada municipio, cargar sus barrios
+                foreach (var municipio in municipios)
+                {
+                    municipio.Provincia = provincia;
+                    var barrios = (await ObtenerBarriosAsync(municipio.Id)).ToList();
+                    municipio.Barrios = barrios;
+
+                    // Establecer referencia al municipio en cada barrio
+                    foreach (var barrio in barrios)
+                    {
+                        barrio.Municipio = municipio;
+                    }
+                }
+
+                // Cargar brigadas
+                var brigadas = await ObtenerBrigadasDisponiblesAsync(provincia.Id);
+                foreach (var brigada in brigadas)
+                {
+                    provincia.BrigadasDisponibles.Add(brigada);
+                }
+            }
+
+            return provincias;
+        }
 
         // --------- Utilidades ----------------------------------------
 

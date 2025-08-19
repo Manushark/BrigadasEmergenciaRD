@@ -8,6 +8,7 @@ namespace BrigadasEmergenciaRD.Core.Models
         public int TotalTareasEjecutadas { get; set; }       // Total de tareas procesadas
         public int MaximoHilosConcurrentes { get; set; }     // Número máximo de hilos concurrentes
         public int TareasEjecutadasEnParalelo { get; set; }  // Número de tareas ejecutadas en paralelo
+        public TimeSpan DuracionTotal { get; set; }
         public List<MedicionHilo> MedicionesPorHilo { get; set; } = new List<MedicionHilo>();
     }
 }
