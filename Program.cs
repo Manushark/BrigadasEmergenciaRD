@@ -370,3 +370,103 @@ class Program
         }
     }
     #endregion
+
+    #region Análisis de Speedup
+    static async Task EjecutarAnalisisSpeedupAsync()
+    {
+        Console.Clear();
+        MostrarTitulo("ANALISIS DE SPEEDUP CON MULTIPLES NUCLEOS");
+
+        var cantidadEmergencias = SolicitarCantidadEmergencias();
+        var emergencias = GenerarEmergenciasReales(cantidadEmergencias);
+        var configuracionesNucleos = new[] { 1, 2, 4, 8, 16, Environment.ProcessorCount }
+            .Where(n => n <= Environment.ProcessorCount).Distinct().OrderBy(x => x).ToArray();
+
+        Console.WriteLine($"Sistema: {Environment.ProcessorCount} núcleos | Configuraciones: {string.Join(", ", configuracionesNucleos)}\n");
+
+        // Baseline secuencial
+        Console.WriteLine("Midiendo tiempo secuencial...");
+        var tiempoSecuencial = await MedirTiempoSecuencialAsync(emergencias);
+
+        var resultados = new List<ResultadoSpeedup>();
+
+        // Probar cada configuración
+        foreach (var nucleos in configuracionesNucleos)
+        {
+            Console.WriteLine($"Probando con {nucleos} núcleo{(nucleos == 1 ? "" : "s")}...");
+
+            try
+            {
+                var (tiempoParalelo, stats) = await MedirTiempoParaleloConNucleosAsync(emergencias, nucleos);
+                var speedup = tiempoSecuencial.TotalSeconds / tiempoParalelo.TotalSeconds;
+                var eficiencia = speedup / nucleos * 100;
+
+                resultados.Add(new ResultadoSpeedup
+                {
+                    Nucleos = nucleos,
+                    TiempoSecuencial = tiempoSecuencial,
+                    TiempoParalelo = tiempoParalelo,
+                    Speedup = speedup,
+                    Eficiencia = eficiencia,
+                    Estadisticas = stats
+                });
+
+                Console.WriteLine($"   {nucleos} núcleos: {tiempoParalelo.TotalSeconds:F2}s | Speedup: {speedup:F2}x | Eficiencia: {eficiencia:F1}%");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"   Error con {nucleos} núcleos: {ex.Message}");
+            }
+        }
+
+        MostrarAnalisisSpeedupCompleto(resultados, tiempoSecuencial, cantidadEmergencias);
+    }
+
+    static void MostrarAnalisisSpeedupCompleto(List<ResultadoSpeedup> resultados, TimeSpan tiempoSecuencial, int totalEmergencias)
+    {
+        Console.WriteLine("\n" + new string('=', 80));
+        MostrarTitulo("ANALISIS COMPLETO DE SPEEDUP Y EFICIENCIA");
+
+        // Tabla de resultados
+        Console.WriteLine("┌─────────┬──────────────┬──────────────┬───────────┬─────────────┐");
+        Console.WriteLine("│ Núcleos │   Tiempo (s) │   Speedup    │ Eficiencia │  Throughput │");
+        Console.WriteLine("├─────────┼──────────────┼──────────────┼───────────┼─────────────┤");
+
+        foreach (var resultado in resultados.OrderBy(r => r.Nucleos))
+        {
+            var throughput = totalEmergencias / resultado.TiempoParalelo.TotalSeconds;
+            Console.WriteLine($"│ {resultado.Nucleos,7} │ {resultado.TiempoParalelo.TotalSeconds,12:F2} │ {resultado.Speedup,12:F2}x │ {resultado.Eficiencia,9:F1}% │ {throughput,11:F1}/s │");
+        }
+
+        Console.WriteLine("└─────────┴──────────────┴──────────────┴───────────┴─────────────┘\n");
+
+        // Análisis y recomendaciones
+        MostrarRecomendaciones(resultados);
+    }
+
+    static void MostrarRecomendaciones(List<ResultadoSpeedup> resultados)
+    {
+        var puntoOptimo = resultados.OrderByDescending(r => r.Speedup / r.Nucleos).First();
+        var mejorSpeedup = resultados.OrderByDescending(r => r.Speedup).First();
+
+        Console.WriteLine("RECOMENDACIONES");
+        Console.WriteLine("===============");
+        Console.WriteLine($"Configuración óptima: {puntoOptimo.Nucleos} núcleos (mejor ratio costo/beneficio)");
+        Console.WriteLine($"Mejor speedup absoluto: {mejorSpeedup.Speedup:F2}x con {mejorSpeedup.Nucleos} núcleos");
+
+        var escalabilidad = mejorSpeedup.Speedup / mejorSpeedup.Nucleos;
+        var evaluacion = escalabilidad > 0.8 ? "Excelente" : escalabilidad > 0.6 ? "Buena" : escalabilidad > 0.4 ? "Regular" : "Limitada";
+        Console.WriteLine($"Escalabilidad del sistema: {evaluacion} ({escalabilidad:P1})");
+    }
+
+    private class ResultadoSpeedup
+    {
+        public int Nucleos { get; set; }
+        public TimeSpan TiempoSecuencial { get; set; }
+        public TimeSpan TiempoParalelo { get; set; }
+        public double Speedup { get; set; }
+        public double Eficiencia { get; set; }
+        public EstadisticasParalelismo Estadisticas { get; set; }
+    }
+ #endregion
+
