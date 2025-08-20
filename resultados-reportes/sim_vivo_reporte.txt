@@ -1,0 +1,14 @@
+REPORTE SIM_VIVO
+================
++===========================+=====================+
+| Metrica                   | Valor               |
++---------------------------+---------------------+
+| Inicio UTC                | 2025-08-20 22:43:55 |
+| Fin UTC                   | 2025-08-20 22:44:25 |
+| Duracion (s)              | 30.28               |
+| Llamadas generadas        | 11                  |
+| Llamadas asignadas        | 10                  |
+| Llamadas atendidas        | 10                  |
+| Llamadas reencoladas      | 0                   |
+| Throughput (atenciones/s) | 0.33                |
++===========================+=====================+

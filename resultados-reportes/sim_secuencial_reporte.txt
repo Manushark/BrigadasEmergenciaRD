@@ -1,0 +1,14 @@
+REPORTE SIM_SECUENCIAL
+======================
++===========================+=====================+
+| Metrica                   | Valor               |
++---------------------------+---------------------+
+| Inicio UTC                | 2025-08-20 21:53:21 |
+| Fin UTC                   | 2025-08-20 21:53:58 |
+| Duracion (s)              | 37.22               |
+| Llamadas generadas        | 50                  |
+| Llamadas asignadas        | 50                  |
+| Llamadas atendidas        | 50                  |
+| Llamadas reencoladas      | 0                   |
+| Throughput (atenciones/s) | 1.34                |
++===========================+=====================+

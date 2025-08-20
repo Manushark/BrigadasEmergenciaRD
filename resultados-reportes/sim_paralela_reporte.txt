@@ -1,0 +1,14 @@
+REPORTE SIM_PARALELA
+====================
++===========================+=====================+
+| Metrica                   | Valor               |
++---------------------------+---------------------+
+| Inicio UTC                | 2025-08-19 15:50:52 |
+| Fin UTC                   | 2025-08-19 15:51:03 |
+| Duracion (s)              | 11.02               |
+| Llamadas generadas        | 50                  |
+| Llamadas asignadas        | 50                  |
+| Llamadas atendidas        | 50                  |
+| Llamadas reencoladas      | 0                   |
+| Throughput (atenciones/s) | 4.54                |
++===========================+=====================+

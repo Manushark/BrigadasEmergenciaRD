@@ -92,7 +92,7 @@ namespace BrigadasEmergenciaRD.Data
                     Id = idInt,
                     Codigo = p.Codigo,
                     Nombre = p.Nombre,
-                    Region = "Región " + _rng.Next(1, 6),
+                    Region = "Región " + _rng.Next(1, 3),
                     Poblacion = _rng.Next(200_000, 2_000_000),
                     Coordenadas = CoordenadaAleatoriaRD(),
                     Municipios = new List<Municipio>(),
