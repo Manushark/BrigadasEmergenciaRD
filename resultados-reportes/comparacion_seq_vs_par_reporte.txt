@@ -1,0 +1,12 @@
+REPORTE COMPARACION_SEQ_VS_PAR
+==============================
++===================+=======+
+| Campo             | Valor |
++-------------------+-------+
+| Iteraciones       | 50    |
+| P (hilos)         | 4     |
+| T secuencial (ms) | 40293 |
+| T paralelo (ms)   | 10311 |
+| Speedup (x)       | 3.91  |
+| Eficiencia (%)    | 97.7  |
++===================+=======+

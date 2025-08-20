@@ -31,7 +31,9 @@ class Program
 
         try
         {
+            // Esta operación puede tomar tiempo por eso es asíncrona
             await InicializarSistemaAsync();
+            // Este método mantiene el programa ejecutándose hasta que el usuario salga
             await MostrarMenuPrincipalAsync();
         }
         catch (Exception ex)
@@ -53,11 +55,15 @@ class Program
         Console.WriteLine();
     }
 
+    // Inicializa el sistema cargando todos los datos necesarios desde archivos JSON
     static async Task InicializarSistemaAsync()
     {
         MostrarInfo("Inicializando sistema...");
 
+        // Luego se entra a src/data donde están los archivos JSON
+
         var rutaData = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "src", "data"));
+        // Crear el proveedor de datos que sabe cómo leer los archivos JSON
         var dataProvider = new JsonDataProvider(rutaData);
 
         _provincias = await dataProvider.ObtenerDatosCompletosAsync();
@@ -66,6 +72,7 @@ class Program
         MostrarExito($"Sistema inicializado: {_provincias.Count} provincias, {_todasBrigadas.Count} brigadas\n");
     }
 
+    // Este método controla el flujo principal de la aplicación
     static async Task MostrarMenuPrincipalAsync()
     {
         while (true)
@@ -105,12 +112,13 @@ class Program
     }
 
     #region Simulacion en Vivo
+    // Solicita parámetros al usuario y luego inicia la simulación visual
     static async Task EjecutarSimulacionEnVivoAsync()
     {
         Console.Clear();
         MostrarTitulo("SIMULACION EN TIEMPO REAL");
 
-        var duracionSegundos = SolicitarEntero("Duracion de la simulacion en segundos (30-300): ", 30, 300, 60);
+        var duracionSegundos = SolicitarEntero("Duracion de la simulacion en segundos (30-100): ", 30, 100, 50);
         var intervaloMs = SolicitarEntero("Intervalo entre emergencias en ms (500-5000): ", 500, 5000, 2000);
 
         Console.Clear();
@@ -119,12 +127,14 @@ class Program
 
     static async Task MostrarSimulacionEnVivoAsync(int duracionSegundos, int intervaloMs)
     {
+        // Resetear todos los contadores a cero
         ReiniciarEstadisticas();
         using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(duracionSegundos));
         Console.CursorVisible = false;
 
         try
         {
+            // EJECUCION CONCURRENTE: Dos tareas principales ejecutándose simultáneamente
             await Task.WhenAll(
                 GenerarEmergenciasEnVivoAsync(intervaloMs, cts.Token),
                 MostrarPantallaEnVivoAsync(cts.Token)
@@ -144,6 +154,7 @@ class Program
         _emergenciasGeneradas = _emergenciasAtendidas = _brigadasEnServicio = 0;
     }
 
+    // Se ejecuta en un hilo separado y crea nuevas emergencias periódicamente
     static async Task GenerarEmergenciasEnVivoAsync(int intervaloMs, CancellationToken ct)
     {
         while (!ct.IsCancellationRequested)
@@ -153,12 +164,13 @@ class Program
                 var emergencia = GenerarEmergenciaAleatoria();
                 _ = Task.Run(() => ProcesarEmergenciaEnVivoAsync(emergencia, ct), ct);
                 Interlocked.Increment(ref _emergenciasGeneradas);
-                await Task.Delay(intervaloMs + _random.Next(-500, 500), ct);
+                await Task.Delay(intervaloMs + _random.Next(-500, 2500), ct);
             }
             catch (OperationCanceledException) { break; }
         }
     }
 
+    // Simula todo el flujo: despacho de brigada, tiempo de respuesta
     static async Task ProcesarEmergenciaEnVivoAsync(EmergenciaEvento emergencia, CancellationToken ct)
     {
         try
@@ -170,9 +182,11 @@ class Program
                 MostrarDespachoEnVivo(emergencia, brigada);
 
                 var tiempoRespuesta = CalcularTiempoRespuesta(emergencia, brigada);
-                await Task.Delay(tiempoRespuesta / 10, ct);
+                await Task.Delay(tiempoRespuesta / 100, ct);
 
+                await Task.Delay(1000, ct);
                 Interlocked.Increment(ref _emergenciasAtendidas);
+                await Task.Delay(_random.Next(-500, 3500), ct);
                 Interlocked.Decrement(ref _brigadasEnServicio);
                 MostrarEmergenciaResuelta(emergencia, brigada);
             }
@@ -225,12 +239,12 @@ class Program
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.Write($"EMERGENCIA: ");
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.Write($"{emergencia.Tipo}");
+            Console.Write($" {emergencia.Tipo}");
             Console.ResetColor();
             Console.Write($" en {ubicacion}");
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Blue;
-            Console.WriteLine($"   Despachando: {brigada.Nombre} ({brigada.Tipo}) | Afectadas: {emergencia.PersonasAfectadas} | Intensidad: {emergencia.Intensidad}");
+            Console.WriteLine($"   Despachando: Por ({brigada.Tipo}) de {ubicacion}| Afectadas: {emergencia.PersonasAfectadas} | Intensidad: {emergencia.Intensidad}");
             Console.ResetColor();
         }
     }
@@ -240,7 +254,7 @@ class Program
         lock (_lockConsole)
         {
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"   Emergencia #{emergencia.Id} resuelta por {brigada.Nombre}");
+            Console.WriteLine($"   Emergencia #{emergencia.Tipo} resuelta por {brigada.Nombre}");
             Console.ResetColor();
         }
     }
