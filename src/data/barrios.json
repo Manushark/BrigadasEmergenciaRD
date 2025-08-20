@@ -1,0 +1,800 @@
+[
+  {
+    "id": "01",
+    "provincia": "Distrito Nacional",
+    "municipios": [
+      {
+        "id": "0101",
+        "nombre": "Santo Domingo de Guzmán",
+        "barrios": [
+          {
+            "id": "010101",
+            "nombre": "Zona Colonial"
+          },
+          {
+            "id": "010102",
+            "nombre": "Gazcue"
+          },
+          {
+            "id": "010103",
+            "nombre": "Piantini"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "02",
+    "provincia": "Azua",
+    "municipios": [
+      {
+        "id": "0201",
+        "nombre": "Azua de Compostela",
+        "barrios": [
+          {
+            "id": "020101",
+            "nombre": "La Bombita"
+          },
+          {
+            "id": "020102",
+            "nombre": "El Prado"
+          },
+          {
+            "id": "020103",
+            "nombre": "Las Yayas"
+          }
+        ]
+      },
+      {
+        "id": "0202",
+        "nombre": "Padre Las Casas",
+        "barrios": [
+          {
+            "id": "020201",
+            "nombre": "Villa Ocoa"
+          },
+          {
+            "id": "020202",
+            "nombre": "Las Lomas"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "03",
+    "provincia": "Baoruco",
+    "municipios": [
+      {
+        "id": "0301",
+        "nombre": "Neiba",
+        "barrios": [
+          {
+            "id": "030101",
+            "nombre": "Villa Esperanza"
+          },
+          {
+            "id": "030102",
+            "nombre": "El Manguito"
+          },
+          {
+            "id": "030103",
+            "nombre": "San Bartolomé"
+          }
+        ]
+      },
+      {
+        "id": "0302",
+        "nombre": "Tamayo",
+        "barrios": [
+          {
+            "id": "030201",
+            "nombre": "Santana"
+          },
+          {
+            "id": "030202",
+            "nombre": "Los Conuquitos"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "04",
+    "provincia": "Barahona",
+    "municipios": [
+      {
+        "id": "0401",
+        "nombre": "Barahona",
+        "barrios": [
+          {
+            "id": "040101",
+            "nombre": "Palmarito"
+          },
+          {
+            "id": "040102",
+            "nombre": "La Playa"
+          },
+          {
+            "id": "040103",
+            "nombre": "Enriquillo"
+          }
+        ]
+      },
+      {
+        "id": "0402",
+        "nombre": "Paraíso",
+        "barrios": [
+          {
+            "id": "040201",
+            "nombre": "La Ciénaga"
+          },
+          {
+            "id": "040202",
+            "nombre": "El Fondo"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "05",
+    "provincia": "Dajabón",
+    "municipios": [
+      {
+        "id": "0501",
+        "nombre": "Dajabón",
+        "barrios": [
+          {
+            "id": "050101",
+            "nombre": "Barrio Norte"
+          },
+          {
+            "id": "050102",
+            "nombre": "Barrio Sur"
+          },
+          {
+            "id": "050103",
+            "nombre": "El Centro"
+          }
+        ]
+      },
+      {
+        "id": "0502",
+        "nombre": "Loma de Cabrera",
+        "barrios": [
+          {
+            "id": "050201",
+            "nombre": "La Fe"
+          },
+          {
+            "id": "050202",
+            "nombre": "El Pino"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "06",
+    "provincia": "Duarte",
+    "municipios": [
+      {
+        "id": "0601",
+        "nombre": "San Francisco de Macorís",
+        "barrios": [
+          {
+            "id": "060101",
+            "nombre": "Santa Ana"
+          },
+          {
+            "id": "060102",
+            "nombre": "La Javiela"
+          },
+          {
+            "id": "060103",
+            "nombre": "Rabo de Chivo"
+          }
+        ]
+      },
+      {
+        "id": "0602",
+        "nombre": "Villa Riva",
+        "barrios": [
+          {
+            "id": "060201",
+            "nombre": "Cristo Rey"
+          },
+          {
+            "id": "060202",
+            "nombre": "El Indio"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "07",
+    "provincia": "Elías Piña",
+    "municipios": [
+      {
+        "id": "0701",
+        "nombre": "Hondo Valle",
+        "barrios": [
+          {
+            "id": "070101",
+            "nombre": "Los Jobos"
+          },
+          {
+            "id": "070102",
+            "nombre": "El Llano"
+          },
+          {
+            "id": "070103",
+            "nombre": "La Palma"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "08",
+    "provincia": "El Seibo",
+    "municipios": [
+      {
+        "id": "0801",
+        "nombre": "El Seibo",
+        "barrios": [
+          {
+            "id": "080101",
+            "nombre": "Ginandiana"
+          },
+          {
+            "id": "080102",
+            "nombre": "Los Hoyitos"
+          },
+          {
+            "id": "080103",
+            "nombre": "El Centro"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "09",
+    "provincia": "Independencia",
+    "municipios": [
+      {
+        "id": "0901",
+        "nombre": "Duvergé",
+        "barrios": [
+          {
+            "id": "090101",
+            "nombre": "Las Baitoas"
+          },
+          {
+            "id": "090102",
+            "nombre": "El Centro"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "10",
+    "provincia": "Espaillat",
+    "municipios": [
+      {
+        "id": "1001",
+        "nombre": "San Víctor",
+        "barrios": [
+          {
+            "id": "100101",
+            "nombre": "Los Cocos"
+          },
+          {
+            "id": "100102",
+            "nombre": "El Centro"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "11",
+    "provincia": "La Altagracia",
+    "municipios": [
+      {
+        "id": "1101",
+        "nombre": "Higüey",
+        "barrios": [
+          {
+            "id": "110101",
+            "nombre": "Savica"
+          },
+          {
+            "id": "110102",
+            "nombre": "San José"
+          },
+          {
+            "id": "110103",
+            "nombre": "Boca de Yuma"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "12",
+    "provincia": "La Romana",
+    "municipios": [
+      {
+        "id": "1201",
+        "nombre": "La Romana",
+        "barrios": [
+          {
+            "id": "120101",
+            "nombre": "Villa Verde"
+          },
+          {
+            "id": "120102",
+            "nombre": "San Carlos"
+          },
+          {
+            "id": "120103",
+            "nombre": "El Centro"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "13",
+    "provincia": "La Vega",
+    "municipios": [
+      {
+        "id": "1301",
+        "nombre": "La Vega",
+        "barrios": [
+          {
+            "id": "130101",
+            "nombre": "San Miguel"
+          },
+          {
+            "id": "130102",
+            "nombre": "El Centro"
+          },
+          {
+            "id": "130103",
+            "nombre": "Buenos Aires"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "14",
+    "provincia": "María Trinidad Sánchez",
+    "municipios": [
+      {
+        "id": "1401",
+        "nombre": "Nagua",
+        "barrios": [
+          {
+            "id": "140101",
+            "nombre": "Las Flores"
+          },
+          {
+            "id": "140102",
+            "nombre": "La Playa"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "15",
+    "provincia": "Samaná",
+    "municipios": [
+      {
+        "id": "1501",
+        "nombre": "Santa Bárbara de Samaná",
+        "barrios": [
+          {
+            "id": "150101",
+            "nombre": "Los Cacaos"
+          },
+          {
+            "id": "150102",
+            "nombre": "El Centro"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "16",
+    "provincia": "San José de Ocoa",
+    "municipios": [
+      {
+        "id": "1601",
+        "nombre": "San José de Ocoa",
+        "barrios": [
+          {
+            "id": "160101",
+            "nombre": "El Pinar"
+          },
+          {
+            "id": "160102",
+            "nombre": "El Centro"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "17",
+    "provincia": "Montecristi",
+    "municipios": [
+      {
+        "id": "1701",
+        "nombre": "San Fernando de Monte Cristi",
+        "barrios": [
+          {
+            "id": "170101",
+            "nombre": "San Pedro"
+          },
+          {
+            "id": "170102",
+            "nombre": "El Centro"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "18",
+    "provincia": "Monte Plata",
+    "municipios": [
+      {
+        "id": "1801",
+        "nombre": "Yamasá",
+        "barrios": [
+          {
+            "id": "180101",
+            "nombre": "Los Mangos"
+          },
+          {
+            "id": "180102",
+            "nombre": "El Centro"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "19",
+    "provincia": "Puerto Plata",
+    "municipios": [
+      {
+        "id": "1901",
+        "nombre": "Puerto Plata",
+        "barrios": [
+          {
+            "id": "190101",
+            "nombre": "Los Mameyes"
+          },
+          {
+            "id": "190102",
+            "nombre": "Playa Oeste"
+          },
+          {
+            "id": "190103",
+            "nombre": "El Centro"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "20",
+    "provincia": "San Juan",
+    "municipios": [
+      {
+        "id": "2001",
+        "nombre": "San Juan de la Maguana",
+        "barrios": [
+          {
+            "id": "200101",
+            "nombre": "Meseta"
+          },
+          {
+            "id": "200102",
+            "nombre": "El Centro"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "21",
+    "provincia": "Peravia",
+    "municipios": [
+      {
+        "id": "2101",
+        "nombre": "Baní",
+        "barrios": [
+          {
+            "id": "210101",
+            "nombre": "Santa Rosa"
+          },
+          {
+            "id": "210102",
+            "nombre": "El Centro"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "22",
+    "provincia": "Pedernales",
+    "municipios": [
+      {
+        "id": "2201",
+        "nombre": "Pedernales",
+        "barrios": [
+          {
+            "id": "220101",
+            "nombre": "Alcoa"
+          },
+          {
+            "id": "220102",
+            "nombre": "Las Lagunas"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "23",
+    "provincia": "San Pedro de Macorís",
+    "municipios": [
+      {
+        "id": "2301",
+        "nombre": "San Pedro de Macorís",
+        "barrios": [
+          {
+            "id": "230101",
+            "nombre": "Los Maestros"
+          },
+          {
+            "id": "230102",
+            "nombre": "El Centro"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "24",
+    "provincia": "Sánchez Ramírez",
+    "municipios": [
+      {
+        "id": "2401",
+        "nombre": "Cotuí",
+        "barrios": [
+          {
+            "id": "240101",
+            "nombre": "La Esperanza"
+          },
+          {
+            "id": "240102",
+            "nombre": "Los Cocos"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "25",
+    "provincia": "Santiago",
+    "municipios": [
+      {
+        "id": "2501",
+        "nombre": "Santiago de los Caballeros",
+        "barrios": [
+          {
+            "id": "250101",
+            "nombre": "Cerro Alto"
+          },
+          {
+            "id": "250102",
+            "nombre": "Los Jardines Metropolitanos"
+          },
+          {
+            "id": "250103",
+            "nombre": "Cienfuegos"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "26",
+    "provincia": "Santiago Rodríguez",
+    "municipios": [
+      {
+        "id": "2601",
+        "nombre": "San Ignacio de Sabaneta",
+        "barrios": [
+          {
+            "id": "260101",
+            "nombre": "Los Multis"
+          },
+          {
+            "id": "260102",
+            "nombre": "El Centro"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "27",
+    "provincia": "Hato Mayor",
+    "municipios": [
+      {
+        "id": "2701",
+        "nombre": "Hato Mayor del Rey",
+        "barrios": [
+          {
+            "id": "270101",
+            "nombre": "Gualey"
+          },
+          {
+            "id": "270102",
+            "nombre": "El Centro"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "28",
+    "provincia": "Monseñor Nouel",
+    "municipios": [
+      {
+        "id": "2801",
+        "nombre": "Bonao",
+        "barrios": [
+          {
+            "id": "280101",
+            "nombre": "Los Amigos"
+          },
+          {
+            "id": "280102",
+            "nombre": "El Centro"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "29",
+    "provincia": "San Cristóbal",
+    "municipios": [
+      {
+        "id": "2901",
+        "nombre": "San Cristóbal",
+        "barrios": [
+          {
+            "id": "290101",
+            "nombre": "Madre Vieja Norte"
+          },
+          {
+            "id": "290102",
+            "nombre": "5 de Abril"
+          },
+          {
+            "id": "290103",
+            "nombre": "El Centro"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "30",
+    "provincia": "Santo Domingo",
+    "municipios": [
+      {
+        "id": "3001",
+        "nombre": "Santo Domingo Este",
+        "barrios": [
+          {
+            "id": "300101",
+            "nombre": "Los Mina"
+          },
+          {
+            "id": "300102",
+            "nombre": "La Ureña"
+          },
+          {
+            "id": "300103",
+            "nombre": "El Almirante"
+          }
+        ]
+      },
+      {
+        "id": "3002",
+        "nombre": "Santo Domingo Norte",
+        "barrios": [
+          {
+            "id": "300201",
+            "nombre": "Sabana Perdida"
+          },
+          {
+            "id": "300202",
+            "nombre": "Villa Mella"
+          }
+        ]
+      },
+      {
+        "id": "3003",
+        "nombre": "Santo Domingo Oeste",
+        "barrios": [
+          {
+            "id": "300301",
+            "nombre": "Manoguayabo"
+          },
+          {
+            "id": "300302",
+            "nombre": "Herrera"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "31",
+    "provincia": "Valverde",
+    "municipios": [
+      {
+        "id": "3101",
+        "nombre": "Santa Cruz de Mao",
+        "barrios": [
+          {
+            "id": "310101",
+            "nombre": "Hatico"
+          },
+          {
+            "id": "310102",
+            "nombre": "La Altagracia"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "32",
+    "provincia": "Hermanas Mirabal",
+    "municipios": [
+      {
+        "id": "3201",
+        "nombre": "Salcedo",
+        "barrios": [
+          {
+            "id": "320101",
+            "nombre": "Los Mangos"
+          },
+          {
+            "id": "320102",
+            "nombre": "El Centro"
+          }
+        ]
+      }
+    ]
+  }
+]
